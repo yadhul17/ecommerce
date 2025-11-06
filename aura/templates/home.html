@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+</head>
+<body>
+    <main class="w-full h-[100vh] bg-linear-to-r from-pink-200 to-yellow-100">
+        <nav class="w-full h-30 bg-white flex justify-center items-center">
+            <div class="flex-1 bg-black">
+            
+            </div>
+            <div class="flex-2">
+
+            </div>
+            <div class="flex-2 bg-black">
+
+            </div>
+             
+        </nav>
+        <div class="w-full h-auto flex justify-center">
+
+        <div class="w-[80%] h-70 bg-white mt-20 flex justify-evenly items-center ">
+                {% for i in data %}
+            <div class="w-40 h-60  border-1">
+                <img src="{{i.img.url}}" alt="image " class="w-40 h-40 border-1">
+                
+                <h1>{{i.name}}</h1>
+                <h1>{{i.price}}</h1>
+
+
+            </div>
+             {% endfor %}
+
+        </div>
+        </div>
+
+    </main>
+</body>
+</html>
