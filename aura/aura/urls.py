@@ -24,7 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home),
     path('adlogin/',views.adminlogin),
-    path('add/',views.adddetails)
+    path('adds/',views.adddetails),
+    path('catalog/',views.catalogs),
+    path('view/<int:id>',views.viewall)
+    
 ]
 
 if settings.DEBUG:

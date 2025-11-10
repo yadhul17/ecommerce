@@ -1,44 +1,93 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD"/>
 
 </head>
+
 <body>
-    <main class="w-full h-[100vh] bg-linear-to-r from-pink-200 to-yellow-100">
-        <nav class="w-full h-30 bg-white flex justify-center items-center">
+    <main class="w-full h-[150vh] bg-linear-to-r from-gray-600 to-gray-100">
+        <nav class="w-full h-30 bg-black flex justify-center items-center">
             <div class="flex-1 bg-black">
-            
-            </div>
-            <div class="flex-2">
+                <h1 class="font-serif text-3xl antialiased text-white  px-10 text-center">AURA</h1>
 
             </div>
-            <div class="flex-2 bg-black">
+            <div class="flex-2 flex gap-x-8 ">
+                <a href="../"
+                    class="text-white hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg">
+                    Home
+                </a>
+                <a href="../catalog/"
+                    class="text-white hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg">
+                    Catalog
+                </a>
+            </div>
+
+            <div class="flex-2 text-white flex justify-center gap-x-7">
+                <span class="material-symbols-outlined">
+                    search
+                </span>
+
+                <span class="material-symbols-outlined">
+                    local_mall
+                </span>
+
 
             </div>
-             
+
         </nav>
-        <div class="w-full h-auto flex justify-center">
-
-        <div class="w-[80%] h-70 bg-white mt-20 flex justify-evenly items-center ">
-                {% for i in data %}
-            <div class="w-40 h-60  border-1">
-                <img src="{{i.img.url}}" alt="image " class="w-40 h-40 border-1">
-                
-                <h1>{{i.name}}</h1>
-                <h1>{{i.price}}</h1>
-
+        <div class="w-full h-auto flex justify-center items-center flex-col">
+            <div class="w-[80%] h-70 bg-white mt-5">
+                <img src="" alt="">
 
             </div>
-             {% endfor %}
 
+       <div class="w-4/5 mt-20 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+  {% for i in data %}
+  <div
+    class="relative rounded-lg shadow-lg overflow-hidden group w-full h-80 flex flex-col justify-end text-center">
+
+    <!-- <div class="bg-white">
+        {{i.gender}}
+    </div> -->
+    <!-- Image covers the entire card -->
+    <img src="{{ i.img.url }}" alt="{{ i.name }}"
+      class="absolute inset-0 w-full h-full object-center transition-transform duration-500 group-hover:scale-105">
+
+    <!-- Overlay (appears on hover) -->
+    <div
+      class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center">
+      <p class="text-white text-lg font-semibold">{{ i.name }}</p>
+      <a href="../view/{{i.pk}}">
+          class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-3 py-1 rounded-full transition">
+        View Details
+        </a>
+  
+    </div>
+
+    <!-- Text and price over image -->
+    <div class="relative z-10 bg-white bg-opacity-70 backdrop-blur-sm py-2">
+      <h2 class="text-lg font-semibold text-gray-800">{{ i.name }}</h2>
+      <p class="text-xl font-bold text-indigo-600">
+        ₹{{ i.price }}
+      </p>
+      
+    </div>
+  </div>
+  {% endfor %}
+</div>
         </div>
-        </div>
+
+
+
 
     </main>
 </body>
+
 </html>
