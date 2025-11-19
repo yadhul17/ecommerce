@@ -12,44 +12,108 @@
 </head>
 
 <body>
-    <main class="w-full h-[150vh] bg-linear-to-r from-gray-600 to-gray-100">
-        <nav class="w-full h-30 bg-black flex justify-center items-center">
+    <main class="w-full h-auto  bg-linear-to-bl from-violet-300 via-white to-fuchsia-500">
+        <nav class="w-full h-30 bg-black flex justify-center items-center fixed z-1">
             <div class="flex-1 bg-black">
                 <h1 class="font-serif text-3xl antialiased text-white  px-10 text-center">AURA</h1>
 
             </div>
             <div class="flex-2 flex gap-x-8 ">
+               
                 <a href="../"
                     class="text-white hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg">
                     Home
                 </a>
-                <a href="../catalog/"
-                    class="text-white hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg">
-                    Catalog
-                </a>
+    <ul>            
+   <li class="relative group">
+  <h1 class="block px-4 text-white hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg cursor-pointer">
+    Catalog
+  </h1>
+  <!-- Sub-menu -->
+  <ul class="absolute left-0  bg-opacity-10 w-40 bg-white trans border rounded shadow-lg hidden group-hover:block">
+    <li>
+      <a href="../catalog/" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+        ALL
+      </a>
+    </li>
+    <li>
+      <a href="/catalog/men" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+        HIS
+      </a>
+    </li>
+    <li>
+      <a href="/catalog/women" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+        HER
+      </a>
+    </li>
+    <li>
+      <a href="/catalog/unisex" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+        UNISEX
+      </a>
+    </li>
+    
+  </ul>
+</li>
+</ul>
+
+
             </div>
 
             <div class="flex-2 text-white flex justify-center gap-x-7">
                 <span class="material-symbols-outlined">
                     search
                 </span>
+                <a href="../cart">
 
-                <span class="material-symbols-outlined">
+              <span class="material-symbols-outlined">
                     local_mall
                 </span>
+                </a>
+
+              
+                <div class="text-blue-300 ">
+                   <a href="../login/"> <h1>login</h1></a>
+                </div>
+                <div class="text-blue-300 ">
+                   <a href="../logout/"> <h1>logout</h1></a>
+                </div>
+                <h1>
+
+                </h1>
 
 
             </div>
 
         </nav>
         <div class="w-full h-auto flex justify-center items-center flex-col">
-            <div class="w-[80%] h-70 bg-white mt-5">
-                <img src="" alt="">
+          {% if messages %}
+  <div id="django-messages" class="fixed top-4 right-4 space-y-2 z-50 relative">
+    {% for message in messages %}
+      <div class="message px-4 py-2 rounded shadow  border-1-white text-white bg-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+          <div class="w-[90%] mx-auto mt-9 h-[280px] md:h-[350px] overflow-hidden rounded-2xl shadow-lg mt-35">
+  <img src="{% static 'imgaes/3D Perfume Concept Ads.jpg' %}"
+       alt="3D Perfume Concept Ad"
+       class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"/>
+</div>
 
-            </div>
 
-       <div class="w-4/5 mt-20 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+
+
+<div class="mt-10 w-[80%] h-10 text-black font-serif font-bold text-2xl">
+    <h1>OUR NEW LAUNCHES</h1>
+</div>
+       <div class="w-4/5 mt-3 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 z-0">
+        
+    
+
+    
   {% for i in data %}
+  
   <div
     class="relative rounded-lg shadow-lg overflow-hidden group w-full h-80 flex flex-col justify-end text-center">
 
@@ -62,10 +126,10 @@
 
     <!-- Overlay (appears on hover) -->
     <div
-      class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center">
+      class="absolute inset-0 bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center">
       <p class="text-white text-lg font-semibold">{{ i.name }}</p>
-      <a href="../view/{{i.pk}}">
-          class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-3 py-1 rounded-full transition">
+      <a href="../view/{{i.pk}}" class="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-3 py-1 rounded-full transition">
+
         View Details
         </a>
   
@@ -83,11 +147,150 @@
   {% endfor %}
 </div>
         </div>
+        <div class="flex justify-center">
+        <div class=" mt-20  w-[80%] h-10 text-black font-serif font-bold text-2xl flex ">
+    <h1>UPCOMING LAUNCHES</h1>
+</div>
+</div>
+       <div class="w-4/5 mt-3 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 z-0">
+        
+    
+
+    
+  {% for i in d %}
+  
+  <div
+    class="relative rounded-lg shadow-lg overflow-hidden group w-full h-80 flex flex-col justify-end text-center">
+
+    <!-- <div class="bg-white">
+        {{i.gender}}
+    </div> -->
+    <!-- Image covers the entire card -->
+    <img src="{{ i.img.url }}" alt="{{ i.name }}"
+      class="absolute inset-0 w-full h-full object-center transition-transform duration-500 group-hover:scale-105">
+      <div
+      class="absolute inset-0 bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center">
+      <p class="text-white text-lg font-semibold bg-black opacity-30">COMMING SOON</p>
+      
+  
+    </div>
+
+    <!-- Overlay (appears on hover) -->
+    <!-- <div
+      class="absolute inset-0 bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center">
+      <p class="text-white text-lg font-semibold">{{ i.name }}</p>
+
+        View Details
+        </a>
+  
+    </div> -->
+
+    <!-- Text and price over image -->
+    <div class="relative z-10 bg-white bg-opacity-70 backdrop-blur-sm py-2">
+      <h2 class="text-lg font-semibold text-gray-800">{{ i.name }}</h2>
+      
+      
+    </div>
+  </div>
+  {% endfor %}
+</div>
+</div>
+
+<!-- <div class="w-full h-20 bg-black mt-10 flex ">
+  <div class="flex-1  flex justify-center items-center">
+
+<h1 class="font-serif text-white text-3xl antialiased   px-10 text-center">AURA</h1>
+  </div> -->
+  <!-- <div class="flex-4">
+
+  </div> -->
+
+<!-- </div> -->
+<footer class="mt-10 w-full bg-gray-800 text-white">
+  <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+    
+    <!-- QUICK MENU -->
+    <div>
+      <h2 class="text-2xl font-bold uppercase tracking-widest mb-4">Quick Menu</h2>
+      <ul class="space-y-2 text-sm font-serif">
+        <li class="hover:text-gray-400 transition">Home</li>
+        <li class="hover:text-gray-400 transition">Catalog</li>
+        <li class="hover:text-gray-400 transition">About Us</li>
+        <li class="hover:text-gray-400 transition">Privacy Policy</li>
+        <li class="hover:text-gray-400 transition">Shipping Policy</li>
+        <li class="hover:text-gray-400 transition">Return Policy</li>
+        <li class="hover:text-gray-400 transition">Terms &amp; Conditions</li>
+      </ul>
+    </div>
+    
+    <!-- CONTACT INFO / Socials -->
+    <div class="text-center">
+      <h2 class="text-2xl font-bold uppercase tracking-widest mb-4">Contact Info</h2>
+      <ul class="flex justify-center space-x-4">
+        <li><img src="{% static 'images/instagram.png' %}" alt="Instagram" class="w-10 h-10 hover:opacity-80 transition"></li>
+        <li><img src="{% static 'images/whatsapp.png' %}" alt="WhatsApp" class="w-10 h-10 hover:opacity-80 transition"></li>
+        <li><img src="{% static 'images/twitter.png' %}" alt="Twitter" class="w-10 h-10 hover:opacity-80 transition"></li>
+        <li><img src="{% static 'images/facebook.png' %}" alt="Facebook" class="w-10 h-10 hover:opacity-80 transition"></li>
+      </ul>
+    </div>
+    
+    <!-- TOP BRANDS -->
+    <div>
+      <h2 class="text-2xl font-bold uppercase  mb-4">Top Brands</h2>
+      <ul class="space-y-2 text-sm font-serif">
+        <li class="hover:text-gray-400 transition">Azzaro</li>
+        <li class="hover:text-gray-400 transition">Burberry</li>
+        <li class="hover:text-gray-400 transition">Bvlgari</li>
+        <li class="hover:text-gray-400 transition">Davidoff</li>
+        <li class="hover:text-gray-400 transition">Hugo Boss</li>
+        <li class="hover:text-gray-400 transition">Gucci</li>
+      </ul>
+    </div>
+    
+  </div>
+  
+  <div class="border-t border-gray-700 p-2  text-center text-sm text-white">
+    © 2025 AURA. All rights reserved.
+  </div>
+</footer>
+
+
 
 
 
 
     </main>
+    <!-- <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const msgContainer = document.getElementById("django-messages");
+    if (!msgContainer) return;
+
+    const messages = msgContainer.querySelectorAll(".message");
+    if (messages.length === 0) return;
+
+    // Only show the *first* message
+    messages.forEach((m, idx) => {
+      if (idx !== 0) {
+        m.remove();
+      }
+    });
+
+    // Hide the first message after 0.5 seconds (500 ms)
+    const firstMsg = msgContainer.querySelector(".message");
+    if (firstMsg) {
+      setTimeout(() => {
+        // fade-out effect (optional)
+        firstMsg.style.transition = "opacity 0.3s ease";
+        firstMsg.style.opacity = "0";
+        // remove the element after transition
+        setTimeout(() => {
+          firstMsg.remove();
+        }, 300);
+      }, 500);
+    }
+  });
+</script> -->
+
 </body>
 
 </html>

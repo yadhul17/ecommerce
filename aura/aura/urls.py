@@ -25,8 +25,19 @@ urlpatterns = [
     path('',views.home),
     path('adlogin/',views.adminlogin),
     path('adds/',views.adddetails),
-    path('catalog/',views.catalogs),
-    path('view/<int:id>',views.viewall)
+    path('new/',views.adddetail),
+    path('catalog/', views.catalogs),  
+    path('catalog/men', views.men), 
+    path('catalog/women', views.women), 
+    path('catalog/unisex', views.unisex),  
+    path('view/<int:id>',views.viewall),
+    path('register/',views.register),
+    path('login/',views.login_view),
+    path('logout/',views.logout_view),
+    path('cart/<int:id>',views.addtocart),
+    path('cart/',views.cart_view)
+    
+
     
 ]
 

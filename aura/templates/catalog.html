@@ -5,11 +5,201 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite" />
 </head>
 <body>
-  <main class="w-full h-300 ">
+  <main class="w-full h-300 bg-linear-to-bl from-gray-300 via-white to-gray-500  ">
+     <nav class="w-full h-30 bg-white flex justify-center items-center border-b-1">
+            <div class="flex-1 ">
+                <h1 class="font-serif text-3xl antialiased text-black  px-10 text-center">AURA</h1>
+
+            </div>
+            <div class="flex-2 flex gap-x-8 ">
+                <a href="../.."
+                    class="text-black hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg">
+                    Home
+                </a>
+                
+                   <h1 class="text-black hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg">
+                    Catalog</h1>
+                
+            </div>
+
+            <div class="flex-2 text-white flex justify-center gap-x-7 text-black">
+                <span class="material-symbols-outlined">
+                    search
+                </span>
+
+                <span class="material-symbols-outlined">
+                    local_mall
+                </span>
+
+                <div>
+    <ul>
+  <li class="relative group/nav">
+    <h1 class="block px-4 py-2 text-lg text-black cursor-pointer hover:underline mr-60">
+      Filter
+    </h1>
+
+    <ul class="absolute top-full left-0 w-40 bg-white bg-opacity-10 border rounded shadow-lg hidden group-hover/nav:block z-20">
+      <!-- PRICE menu item with fly-out form -->
+      <li class="relative group/price">
+        <a href="#"
+           class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+          PRICE
+        </a>
+
+        <!-- Fly-out form submenu to the right -->
+        <form  id="priceForm" action="../catalog/" method="post"
+              class="hidden group-hover/price:block focus-within:block absolute top-0 left-[90%] ml-1 bg-white border p-2 z-30">
+              {% csrf_token %}
+          <input type="number" required name="value1" maxlength="4" size="3" 
+                 class="border text-black" >
+          <span class="text-black">to</span>
+          <input type="number" required name="value2" maxlength="4" size="3"
+                 class="border text-black">
+          <input type="submit" value="Submit" 
+                 class="bg-blue-500 text-white p-2 mt-2 w-full">
+        </form>
+      </li>
+
+       <li class="relative group/price">
+  <a href="#"
+     class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+    QUANTITY
+  </a>
+
+  <!-- Fly-out form submenu to the right -->
+  <form id="priceForm"
+        action="../catalog/"
+        method="post"
+        class="hidden group-hover/price:block focus-within:block absolute bg-white border p-2 z-30">
+    {% csrf_token %}
+    <input type="number" name="value3" maxlength="auto" size="3" placeholder="enter quantity"
+           class="border text-black ">
+    <input type="submit" value="Submit"
+           class="bg-blue-500 text-white p-2 mt-2 w-full">
+  </form>
+</li>
+
+    </ul>
+  </li>
+</ul>
+
+
+   
+
+                </div>
+
+
+            </div>
+
+        </nav>
+      <div class="w-full  h-auto bg-black flex flex-col  items-center pt-4  pb-10">
+        <p class="text-blue-300 mr-[70%] ">{{head}}</p>
+        <div class="w-[80%] mx-auto grid grid-cols-3 gap-5">
+  {% for i in data %}
+  <div class="relative group overflow-hidden bg-white h-130">
+  <img src="{{ i.img.url }}"
+       alt=""
+       class="w-full h-100 object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"/>
+  
+  <a href="../view/{{ i.pk }}"
+     class="absolute top-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-3 py-1 rounded-full transition">
+    View Details
+  </a>
+ <h1 class="text-2xl font-serif ml-2 text-black  mt-2">
+  {{ i.name }}
+</h1>
+<div class="w-full h-15  flex">
+  <div class="flex-1 flex justify-center items-center mt-3">
+<h1 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">
+  Price: {{ i.price }}/-
+</h1>
+  </div>
+  
+   <div class="flex-1 flex justify-center items-center">
+    <a href="../cart/{{i.pk}}">
+    <h1 class="bg-blue-600 text-white p-2 rounded ">ADD TO CART</h1>
+    </a>
+   
+
+  </div>
+  <div class="flex-1 flex justify-center items-center ">
+    <span class="material-symbols-outlined  ">
+favorite
+</span>
+    
+   
+
+  </div>
+
+</div>
+
+</div>
+
+  {% endfor %}
+</div>
+        
+</div>  
+{% if message %}
+  <div
+    id="messageBox"
+    class="mx-auto mt-10 max-w-3xl p-4 bg-gray-50 border border-gray-300 rounded-lg text-center transition-opacity ease-in-out duration-500 opacity-0"
+    >
+    <h1 class="text-2xl font-serif font-bold text-gray-800">
+      {{ message }}
+    </h1>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const box = document.getElementById('messageBox');
+      if (!box) return;
+
+      const showDuration  = 1000;  // how long it stays fully visible (ms)
+      const fadeDuration  = 500;   // should match your `duration-500` for transition (ms)
+      const cycleDelay    = showDuration + fadeDuration * 2; // total loop length
+
+      function fadeIn() {
+        box.classList.remove('opacity-0');
+        box.classList.add('opacity-100');
+      }
+
+      function fadeOut() {
+        box.classList.remove('opacity-100');
+        box.classList.add('opacity-0');
+      }
+
+      // First show immediately
+      fadeIn();
+
+      // Then set up a repeating cycle
+      setInterval(() => {
+        fadeOut();
+
+        // After fade out completes, fade back in
+        setTimeout(() => {
+          fadeIn();
+        }, fadeDuration);
+
+      }, cycleDelay);
+    });
+  </script>
+  {% endif %}
+  
+
+
+        
 
   </main>  
+  <script>
+  document.getElementById("priceForm").addEventListener("submit", function(e){
+    const minInput = this.elements["min_price"];
+    if (minInput.value.trim() === "") {
+      minInput.value = "1";  // default to 1 if empty
+    }
+    // optionally do similar for max_price or other logic
+  });
+</script>
 </body>
 </html>

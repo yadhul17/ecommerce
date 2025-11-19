@@ -40,39 +40,56 @@
             </div>
 
         </nav>
-        <div class="w-[80%] h-140 bg-white mt-10 flex">
-            {% for i in data %}
-            <div class="w-full h-full  flex items-center  flex-1">
-        <img src="{{ i.img.url }}" alt="{{ i.name }}" class="w-full object-cover h-full ">
-               
-            </div>
-            <div class="w-full h-full  flex flex-col items-center flex-2">
-                
-                <div>
-                    <h1 class="text-[39px] mt-5 font-'Oswald' font-bold">{{i.name}}</h1>
+        <div class="w-[80%] h-130 mx-auto mt-10 bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row transition-all duration-500 hover:shadow-2xl">
+  {% for i in data %}
+  <!-- Image Section -->
+  <div class=" w-full h-130 flex-1">
+    <img src="{{ i.img.url }}" alt="{{ i.name }}" class="w-full h-full object-cover rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
+  </div>
 
-                </div>
-               
-                <div class="w-[90%] h-40 mt-5">
-                    <div class="w-full h-20 flex justify-around items-center ">
-                        <div class="w-50 h-15 border-1 rounded-full  bg-gray-50">PRICE:{{i.price}}</div>
-                                               <a href=""><div class="w-50 h-15 border-1   bg-blue-500 text-center  text-white font-bold text-2xl"><h1 class="mt-2 p-2">>ADD TO CART</h1></div></a> 
+  <!-- Details Section -->
+  <div class="md:w-1/2 w-full flex flex-col justify-center p-8 space-y-6">
+    <h1 class="text-4xl font-bold font-oswald text-gray-800 tracking-wide">{{ i.name }}</h1>
 
+    {% for j in d %}
+    <div class="border-t border-gray-200 pt-4 flex-2">
+      <h2 class="text-2xl font-semibold text-gray-700 mb-2">About</h2>
+      <p class="text-gray-600 leading-relaxed text-lg">{{ j.about }}</p>
+    </div>
+    {% endfor %}
 
-                    </div>
-                {% for i in d %}
-                <div class="w-[90%] h-52 mt-5  border-b-1">
-                    <h1 class="text-2xl font-bold">About</h1>
-                    <p class="font-serif text-xl p-2">{{i.about}}</p>
-                    
-                </div>
-                </div>
-                {% endfor %}
+    <div class="flex items-center justify-between mt-6">
+      <div class="px-4 py-2 bg-gray-100 rounded-full font-semibold text-gray-800 shadow-inner">
+        PRICE: ₹{{ i.price }}
+      </div>
+      {% for j in d %}
+      <div class="px-4 py-2 bg-gray-100 rounded-full font-semibold text-gray-800 shadow-inner">
+        QUANTITY: {{ j.stock }}
+      </div>
+      {% endfor %}
+      
 
-            </div>
-            {% endfor %}
+       <a href="#" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition duration-300 shadow-md">
+        BUY NOW
+      </a>
+      
+     
+      <a href="../cart/{{i.pk}}" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition duration-300 shadow-md">
+        ADD TO CART
+      </a>
 
-        </div>
+    </div>
+    <div class="w-full  py-4 px-2">
+  <ul class="flex flex-wrap justify-evenly items-center space-x-4 md:space-x-8 text-gray-800">
+    <li class="bg-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-shadow">100% Genuine Product</li>
+    <li class="bg-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-shadow">All-our Delivery</li>
+    <li class="bg-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-shadow">Own Products</li>
+  </ul>
+</div>
+
+  </div>
+  {% endfor %}
+</div>
 
     </main>
 </body>

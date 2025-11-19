@@ -1,0 +1,22 @@
+print(code)
+        # if (code=='A'):
+        #     d=perfume.objects.all()
+        #     data=PerfumeDetail.objects.filter(id=id)
+        # else:
+        data=PerfumeDetail.objects.filter(gender=code)
+        item = data.last()
+        id=item.perfume_id
+        d=perfume.objects.filter(id=id)
+        if(code=='M'):
+            string='MALE'
+        elif(code=='F'):
+            string='FEMALE'
+        else:
+            string='UNISEX'
+        context={
+            'greeting':string,
+            'data':data,
+            'd':d,
+            
+
+        }
