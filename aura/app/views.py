@@ -92,14 +92,16 @@ def adddetails(request):
     
 
 def catalogs(request):
-        
             data=perfume.objects.all()
             if request.method=='POST':
-                 v1=request.POST['value1']
-                 v2=request.POST['value2']
-               
-                 data= perfume.objects.filter(price__gt=v1, price__lte=v2)
-               
+                 v1 = request.POST.get('value1')  # returns None if not present
+                 v2 = request.POST.get('value2')
+                 
+            
+                 if v1 is not None and v2 is not None:
+                    data = perfume.objects.filter(price__gt=v1, price__lte=v2)
+                 
+                
             if data.exists():
                 context = {
                 'head': 'for all customers',
@@ -108,8 +110,33 @@ def catalogs(request):
                 return render(request, 'catalog.html', context)
             else:
                 context = {'message': 'No items found in at this particular range'}
-                return render(request, 'catalog.html', context)     
+                return render(request, 'catalog.html', context)
             
+
+
+def quantity(request):
+    if request.method == 'POST':
+        min_q = 0
+        max_q = int(request.POST.get('value3', 0))
+        print(max_q)
+
+        data = perfume.objects.filter(quantity__gte=min_q, quantity__lte=max_q)
+        
+        
+
+        return render(request, 'catalog.html', {
+            'perfumes': data,
+            
+        })
+    return render(request, 'catalog.html')
+
+    
+def serch(request):
+    if request.method=='POST':
+        value=request.POST.get['q']
+        print(value)
+
+    return render(request,'catalog.html')         
 
                      
                  

@@ -27,6 +27,7 @@ urlpatterns = [
     path('adds/',views.adddetails),
     path('new/',views.adddetail),
     path('catalog/', views.catalogs),  
+    path('catalog/',views.quantity),
     path('catalog/men', views.men), 
     path('catalog/women', views.women), 
     path('catalog/unisex', views.unisex),  
@@ -35,7 +36,8 @@ urlpatterns = [
     path('login/',views.login_view),
     path('logout/',views.logout_view),
     path('cart/<int:id>',views.addtocart),
-    path('cart/',views.cart_view)
+    path('cart/',views.cart_view),
+    path('cart/',views.serch)
     
 
     

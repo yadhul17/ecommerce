@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=search" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite" />  
 </head>
 <body>
   <main class="w-full h-300 bg-linear-to-bl from-gray-300 via-white to-gray-500  ">
@@ -20,19 +21,62 @@
                     Home
                 </a>
                 
-                   <h1 class="text-black hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg">
-                    Catalog</h1>
-                
+                  <ul>            
+   <li class="relative group">
+  <h1 class="block px-4 text-black hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg cursor-pointer">
+    Catalog
+  </h1>
+  <!-- Sub-menu -->
+  <ul class="absolute left-0 z-1  bg-opacity-10 w-40 bg-white trans border rounded shadow-lg hidden group-hover:block">
+    <li>
+      <a href="../catalog/" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+        ALL
+      </a>
+    </li>
+    <li>
+      <a href="/catalog/men" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+        HIS
+      </a>
+    </li>
+    <li>
+      <a href="/catalog/women" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+        HER
+      </a>
+    </li>
+    <li>
+      <a href="/catalog/unisex" class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
+        UNISEX
+      </a>
+    </li>
+    
+  </ul>
+</li>
+</ul>
+
             </div>
 
             <div class="flex-2 text-white flex justify-center gap-x-7 text-black">
-                <span class="material-symbols-outlined">
-                    search
-                </span>
+                <form class="relative w-full max-w-md mx-auto" method="post" action="../catalog/">
+  <!-- Input field -->
+   {% csrf_token %}
+  <input
+    type="text"
+    name="q"
+    placeholder="Search…"
+    class="w-full border text-black border-gray-300 rounded-full py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
 
-                <span class="material-symbols-outlined">
-                    local_mall
-                </span>
+  <!-- Icon button -->
+  <button
+    type="submit"
+    class="absolute inset-y-0 right-2 flex items-center justify-center p-1 text-gray-600 hover:text-gray-800"
+  >
+    <span class="material-symbols-outlined text-xl">
+      search
+    </span>
+  </button>
+</form>
+
 
                 <div>
     <ul>
@@ -64,7 +108,7 @@
       </li>
 
        <li class="relative group/price">
-  <a href="#"
+  <a href="../catalog/"
      class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
     QUANTITY
   </a>
@@ -75,7 +119,7 @@
         method="post"
         class="hidden group-hover/price:block focus-within:block absolute bg-white border p-2 z-30">
     {% csrf_token %}
-    <input type="number" name="value3" maxlength="auto" size="3" placeholder="enter quantity"
+    <input type="number" name="value3" maxlength="auto" size="3" placeholder="enter quantity" default=1
            class="border text-black ">
     <input type="submit" value="Submit"
            class="bg-blue-500 text-white p-2 mt-2 w-full">
@@ -126,7 +170,7 @@
 
   </div>
   <div class="flex-1 flex justify-center items-center ">
-    <span class="material-symbols-outlined  ">
+    <span class="material-symbols-outlined">
 favorite
 </span>
     

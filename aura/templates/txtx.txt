@@ -20,3 +20,48 @@ print(code)
             
 
         }
+
+
+          data=perfume.objects.all()
+            if request.method=='POST':
+                 v1=request.GET['value1']
+                 v2=request.GET['value2']
+            if request.method=='POST':
+                 v3=request.GET['value3']
+                 print(v3)
+               
+                 data= perfume.objects.filter(price__gt=v1, price__lte=v2)
+               
+            if data.exists():
+                context = {
+                'head': 'for all customers',
+                'data': data,
+                    }
+                return render(request, 'catalog.html', context)
+            else:
+                context = {'message': 'No items found in at this particular range'}
+                return render(request, 'catalog.html', context)
+
+
+
+
+                if request.method == 'POST':
+     if 'value1' not in request.POST or 'value2' not in request.POST:
+        v3 = request.POST.get('value3')
+        print(v3)
+     else:
+        v1 = request.POST.get('value1')
+        v2 = request.POST.get('value2')
+        # Optionally get v3
+        v3 = request.POST.get('value3')
+        print(v3)
+        data = perfume.objects.filter(price__gt=v1, price__lte=v2)
+        if data.exists():
+                context = {
+                'head': 'for all customers',
+                'data': data,
+                    }
+                return render(request, 'catalog.html', context)
+        else:
+                context = {'message': 'No items found in at this particular range'}
+                return render(request, 'catalog.html', context)  

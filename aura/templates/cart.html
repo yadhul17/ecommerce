@@ -143,7 +143,7 @@
   <form method="post" >
       {% csrf_token %}
       <input type="hidden" name="delete_id" value="{{ i.id }}">
-      <button type="submit">Delete</button>
+      <button type="submit" class="text-red-500">Delete</button>
     </form>
     </div>
 
