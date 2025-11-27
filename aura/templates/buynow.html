@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+              <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+</head>
+<body>
+    
+<main class="w-full h-[130vh] bg-gray-200 flex justify-center items-center">
+    <div class="max-w-full mx-auto py-8 px-4 ">
+  <div class="grid grid-cols-1 md:grid-cols-2 " >
+   
+    
+    
+  
+    <div class="bg-white shadow-md rounded-lg p-6 w-180 ">
+      <h2 class="text-2xl  font-semibold mb-4">Billing & Payment</h2>
+       {% for i in product %}
+      
+    <form method="POST" action="/buy/{{i.pk}}/">
+        {% csrf_token %}
+        <div class="space-y-4">
+        
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+            <input type="text" name="name" id="name" required
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+
+          
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" name="email" id="email" required
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+            <div class="pb-3">
+            <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+           
+            <input type="text" name="gender"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          <div class="flex justify-evenly gap-x-3">
+          <div class="pb-3 flex-1 ">
+            <label for="state" class="block text-sm font-medium text-gray-700">state</label>
+           
+            <input type="text" name="state" 
+              class="mt-1 block w-full border w-10 border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          <div class="pb-3 flex-1">
+            <label for="district" class="block text-sm font-medium text-gray-700">district</label>
+           
+            <input type="text" name="district" 
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+
+          </div>
+
+          
+          <div>
+            <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+            <input type="text" name="address" id="address"
+              class=" h-20 mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          <div class="pb-3">
+            <label for="pincode" class="block text-sm font-medium text-gray-700">pincode</label>
+           
+            <input type="text" name="pincode" id="address"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          <div class="pb-3">
+            <label for="landmark" class="block text-sm font-medium text-gray-700">land mark</label>
+           
+            <input type="text" name="landmark" id="address" 
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          
+
+       
+
+          
+          
+
+          <!-- <h2 class="text-2xl  font-semibold mb-4"> Payment Details</h2>
+          
+          <div>
+            <label for="card_number" class="block text-sm font-medium text-gray-700">Card Number</label>
+            <input type="text" name="card_number" id="card_number" required
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          
+          <div class="flex space-x-4">
+            <div class="w-1/2">
+              <label for="expiry" class="block text-sm font-medium text-gray-700">Expiry</label>
+              <input type="text" name="expiry" id="expiry" placeholder="MM/YY" required
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                       focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
+            <div class="w-1/2">
+              <label for="cvc" class="block text-sm font-medium text-gray-700">CVC</label>
+              <input type="text" name="cvc" id="cvc" required
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                       focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
+          </div>
+
+          -->
+          <div class="pt-4">
+            <button type="submit"
+              class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow hover:bg-indigo-700
+                     focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              Buy Now
+            </button>
+          </div>
+        </div>
+      
+        
+       
+    </div>
+     <div class="w-full  space-y-4">
+        <div class="bg-white shadow-md rounded-lg p-6 ">
+      <h2 class="text-2xl  font-semibold mb-4">product details</h2>
+      <div class="pb-3">
+            <label for="product name" class="block text-sm font-medium text-gray-700">product Name</label>
+            <input type="text" name="pname" id="address" value="{{i.name}}"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          <!-- <div class="pb-3">
+            <label for="price" class="block text-sm font-medium text-gray-700">price</label>
+            <input type="number" name="address" id="address" value="{{p}}"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          -->
+          <div class="pb-3">
+            <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+            <input type="text" name="quantity" 
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+        
+          <div class="pb-3">
+            <label for="odate" class="block text-sm font-medium text-gray-700">order date</label>
+           
+            <input type="text" name="odate" id="address" value="{{today}}"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          <div class="pb-3">
+            <label for="ddate" class="block text-sm font-medium text-gray-700">delivered date</label>
+           
+            <input type="text" name="ddate" id="address" value="{{fdate}}"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3
+                     focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+          </div>
+          
+        
+         <div class="w-full flex flex-col md:flex-row gap-6 bg-gray-50 p-4 md:p-8 rounded-lg shadow-md">
+  <!-- Left: Product Image -->
+  <div class="flex-1 flex justify-center items-center">
+    <img src="{{ i.img.url }}" alt="Product Image"
+         class="w-full max-w-sm h-auto object-cover rounded-lg shadow-lg" />
+  </div>
+
+  <!-- Right: Stock & Price Details -->
+ <div class="flex-1 flex flex-col justify-start space-y-6">
+  {% for detail in details %}
+    <!-- Wrapper Card for Quantity & Price -->
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
+      <div class="mb-4 p-4 bg-indigo-700 rounded-md flex justify-between items-center">
+        <span class="text-lg font-medium text-white">Quantity:</span>
+        <span class="text-lg font-semibold text-indigo-200">{{ detail.stock }}</span>
+      </div>
+      <div class="flex  p-4 justify-between  rounded-md bg-gray-100 items-center">
+        <span class="text-lg font-medium text-gray-700">Price:</span>
+        <span class="text-lg font-semibold text-green-600">₹ {{i.price }}</span>
+      </div>
+    </div>
+
+    <!-- Wrapper Card for Cash on Delivery / Notice -->
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
+      <h1 class="text-xl font-bold text-gray-800 mb-2">Only Cash on Delivery</h1>
+      <p class="text-gray-600">We accept only Cash on Delivery. No other payment methods.</p>
+    </div>
+  {% endfor %}
+</div>
+
+
+ 
+</div>
+
+  
+</form>
+ {% endfor %}
+  </div>
+ 
+ 
+</div>
+</main>
+</body>
+</html>

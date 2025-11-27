@@ -128,3 +128,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'        # e.g., smtp.gmail.com, smtp.sendgrid.net
+EMAIL_PORT = 587                            # typical TLS port
+EMAIL_USE_TLS = True                        # use TLS for encryption
+EMAIL_USE_SSL = False                       # if using SSL instead of TLS, adjust accordingly
+EMAIL_HOST_USER = 'yadhuljayakumar@gmail.com'      # e.g., your email address or API username
+EMAIL_HOST_PASSWORD = 'tlmv vnqf ozhn vqor'

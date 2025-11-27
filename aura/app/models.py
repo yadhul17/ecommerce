@@ -40,6 +40,28 @@ class Cart(models.Model):
     img=models.FileField(upload_to='uploads/')
     name=models.TextField()
     price=models.IntegerField()
+    product_id=models.IntegerField(null=True)
+
+
+class Order(models.Model):
+    user         = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    full_name    = models.CharField(max_length=255)
+    email        = models.EmailField()
+    gender       = models.TextField(max_length=50, blank=True, null=True)    # if you really need gender
+    state        = models.CharField(max_length=100)
+    district     = models.CharField(max_length=100)
+    address      = models.TextField()
+    pincode      = models.CharField(max_length=20)
+    landmark     = models.CharField(max_length=255, blank=True, null=True)
+
+    order_date   = models.TextField()
+    delivered_date = models.TextField(blank=True, null=True)
+    totalprice=models.IntegerField(blank=True,null=True)
+    product_id=models.IntegerField()
+    product_name=models.TextField()
+    quantity=models.IntegerField()
+    img=models.FileField()
+
     
 
 

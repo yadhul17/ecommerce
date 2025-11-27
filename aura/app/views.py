@@ -9,6 +9,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm
 from django.shortcuts import get_object_or_404
+from datetime import date, timedelta
+from django.db.models import F
+from django.core.mail import send_mail
 
 User = get_user_model()
 
@@ -267,15 +270,17 @@ def addtocart(request, id):
         perfume_obj = perfume.objects.get(id=id)
     except perfume.DoesNotExist:
         return HttpResponse("Perfume not found", status=404)
-
+    
     name = perfume_obj.name
     price = perfume_obj.price
     img = perfume_obj.img
+    product_id=id
+    print(product_id)
 
     cart_item, created = Cart.objects.get_or_create(
         user=user,
         name=name,
-        defaults={'price': price, 'img': img}
+        defaults={'price': price, 'img': img,'product_id':product_id}
     )
 
     if created:
@@ -307,3 +312,62 @@ def cart_view(request):
     # For GET or other methods: show cart
     data = Cart.objects.filter(user_id=user_id)
     return render(request, 'cart.html', {'data': data})
+
+def buynows(request,id):
+    if request.user.is_authenticated:
+      user_id = request.user.id
+    product=perfume.objects.filter(id=id)
+    details=PerfumeDetail.objects.filter(perfume_id=id)
+    today=date.today()
+    fdate = today + timedelta(days=5)
+    for i in product:
+        price=i.price
+        pname=i.name
+        img=i.img
+    for i in details:
+        stock=i.stock
+        print(stock)
+    if stock<=0:
+        
+        messages.info(request, "out of stock")
+        return redirect(home)
+    else:
+        if request.method=='POST':
+            name=request.POST['name']
+            email=request.POST['email']
+            gender=request.POST['gender']
+            address=request.POST['address']
+            state=request.POST['state']
+            district=request.POST['district']
+            pincode=request.POST['pincode']
+            landmark=request.POST['landmark']
+            order_date=request.POST['odate']
+            delivered_date=request.POST['ddate']
+            quantity=request.POST['quantity']
+            if int(quantity) > stock:
+                messages.info(request, "Out of stock")
+                return redirect(home)
+            else:
+                 p=int(quantity)*price
+                 data=Order.objects.create(user_id=user_id,address=address,full_name=name,email=email,gender=gender,state=state,district=district,pincode=pincode,landmark=landmark,order_date=order_date,delivered_date=delivered_date,totalprice=p,product_id=id,product_name=pname,quantity=quantity,img=img)
+                 data.save()
+                 PerfumeDetail.objects.filter(perfume_id=id).update(stock=F('stock') - int(quantity))
+                 messages.info(request,"order succesfully")
+                 message = (
+                f"Hello {name}\n"
+                "Thank you for visiting our site AURA perfumes\n"
+                 "We have received your order and it's now confirmed. We will notify you once we start processing and shipping it.\n"
+                f"Product Name: {pname}\n"
+                f"Product Price: {p}\n"
+                f"Quantity: {quantity}\n"
+                f"Location: {address}\n"
+                )
+                 send_mail(
+                subject='order confirmed',
+                message=message,
+                from_email='yadhuljaykumar@gmail.com',  # will use DEFAULT_FROM_EMAIL if None
+                recipient_list=[email],
+                fail_silently=False
+                )
+                 return redirect(home)
+    return  render(request,'buynow.html',{'product':product,'details':details,'today':today,'fdate':fdate,'messages':messages,})

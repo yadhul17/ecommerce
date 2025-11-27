@@ -37,7 +37,8 @@ urlpatterns = [
     path('logout/',views.logout_view),
     path('cart/<int:id>',views.addtocart),
     path('cart/',views.cart_view),
-    path('cart/',views.serch)
+    path('cart/',views.serch),
+    path('buy/<int:id>/',views.buynows,name='buynows')
     
 
     
