@@ -1,0 +1,291 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA | Profile</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-900 font-[Inter]">
+  <main class="min-h-screen flex flex-col">
+    <nav class="sticky top-0 z-20 bg-white/95 border-b border-slate-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <a href="../" class="flex items-center gap-2">
+          <div class="h-9 w-9 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm font-semibold tracking-[0.2em]">AU</div>
+          <div>
+            <p class="text-lg font-[Playfair_Display] tracking-[0.25em] leading-none">AURA</p>
+            <p class="text-[11px] text-slate-500">Perfume Studio</p>
+          </div>
+        </a>
+        <div class="hidden md:flex items-center gap-6 text-sm">
+          <a href="../" class="text-slate-700 hover:text-slate-900">Home</a>
+          <a href="../catalog/" class="text-slate-700 hover:text-slate-900">Catalog</a>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <a href="../cart" class="px-3 py-1.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100">Cart</a>
+          <a href="../wish/" class="px-3 py-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-red-400 active:text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </a>
+          <a href="../profile/" class="px-3 py-1.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100 bg-slate-100">Profile</a>
+          <span class="h-4 w-px bg-slate-200"></span>
+          <a href="../logout/" class="text-slate-500 hover:text-slate-700">Logout</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex-1 py-10 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-6xl mx-auto space-y-8">
+        <!-- Header -->
+        <header>
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Your account</p>
+          <h1 class="text-3xl font-[Playfair_Display] text-slate-900 mt-2">Profile Settings</h1>
+        </header>
+
+        <div class="grid gap-8 lg:grid-cols-3">
+          <!-- Left Column: Profile Information -->
+          <div class="lg:col-span-2 space-y-6">
+            <!-- Personal Information Card -->
+            <section class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-[Playfair_Display] text-slate-900">Personal Information</h2>
+                <button id="editBtn" class="text-sm px-4 py-2 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100">Edit</button>
+              </div>
+              <form method="post" class="space-y-5">
+                {% csrf_token %}
+                <div class="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
+                    <input type="text" name="full_name" value="{{ user.first_name }} {{ user.last_name }}" 
+                           class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent" 
+                           placeholder="Enter your full name">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                    <input type="email" name="email" value="{{ user.email }}" 
+                           class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent" 
+                           placeholder="your.email@example.com">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Phone Number</label>
+                    <input type="tel" name="phone" value="{{ user.phone|default:'' }}" 
+                           class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent" 
+                           placeholder="+91 1234567890">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Date of Birth</label>
+                    <input type="date" name="dob" value="{{ user.dob|default:'' }}" 
+                           class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-2">Bio</label>
+                  <textarea name="bio" rows="3" 
+                            class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent" 
+                            placeholder="Tell us about yourself...">{{ user.bio|default:'' }}</textarea>
+                </div>
+                <div class="pt-2">
+                  <button type="submit" class="px-6 py-2.5 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-800">Save Changes</button>
+                </div>
+              </form>
+            </section>
+
+           
+
+            <!-- Order History -->
+            <section class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-[Playfair_Display] text-slate-900">Order History</h2>
+                <a href="../orders/" class="text-sm text-slate-600 hover:text-slate-900 underline">View all</a>
+              </div>
+              <div class="space-y-4">
+                {% if orders %}
+                  {% for order in orders|slice:":5" %}
+                  <div class="border border-slate-200 rounded-xl p-4 hover:bg-slate-50 transition">
+                    <div class="flex items-start justify-between gap-4">
+                      <div class="flex gap-4 flex-1">
+                        <div class="w-20 h-20 rounded-lg bg-slate-100 overflow-hidden flex-shrink-0">
+                          {% if order.img %}
+                          <img src="{{ order.img.url }}" alt="{{ order.product_name }}" class="w-full h-full object-cover">
+                          {% else %}
+                          <div class="w-full h-full flex items-center justify-center text-slate-400 text-2xl">🌸</div>
+                          {% endif %}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <h3 class="text-base font-semibold text-slate-900 truncate">{{ order.product_name }}</h3>
+                          <p class="text-sm text-slate-600 mt-1">Order #{{ order.id }}</p>
+                          <p class="text-xs text-slate-500 mt-1">{{ order.order_date }}</p>
+                          <div class="flex items-center gap-2 mt-2">
+                            <span class="text-sm font-medium text-slate-900">₹{{ order.totalprice }}</span>
+                            <span class="text-xs text-slate-500">•</span>
+                            <span class="text-xs text-slate-500">Qty: {{ order.quantity }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex flex-col items-end gap-2">
+                        {% if order.delivered_date %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                          <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                          </svg>
+                          Delivered
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+                          <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                          </svg>
+                          Pending
+                        </span>
+                        {% endif %}
+                        <a href="../view/{{ order.product_id }}" class="text-xs text-slate-600 hover:text-slate-900 underline">View Details</a>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                {% else %}
+                  <div class="text-center py-12 text-slate-500">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    <p class="text-sm">No orders yet</p>
+                    <a href="../catalog/" class="text-sm text-slate-900 hover:underline mt-2 inline-block">Start Shopping</a>
+                  </div>
+                {% endif %}
+              </div>
+            </section>
+          </div>
+
+          <!-- Right Column: Suggestion Card -->
+          <div class="space-y-6">
+            <!-- Profile Avatar Card -->
+            <section class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 text-center">
+              <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-3xl font-semibold text-slate-700">
+                {{ user.first_name|first|upper }}{{ user.last_name|first|upper|default:'' }}
+              </div>
+              <h3 class="text-lg font-semibold text-slate-900">{{ user.first_name }} {{ user.last_name|default:'' }}</h3>
+              <p class="text-sm text-slate-600 mt-1">{{ user.email }}</p>
+              <div class="mt-4 pt-4 border-t border-slate-200">
+                <div class="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <p class="text-2xl font-semibold text-slate-900">{{ orders|length|default:0 }}</p>
+                    <p class="text-xs text-slate-500 mt-1">Orders</p>
+                  </div>
+                  <div>
+                    <p class="text-2xl font-semibold text-slate-900">{{ wishlist_count|default:0 }}</p>
+                    <p class="text-xs text-slate-500 mt-1">Wishlist</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Next Level Suggestion Card -->
+            <section class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl shadow-lg p-6 text-white">
+              <div class="flex items-center gap-2 mb-4">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <h3 class="text-lg font-[Playfair_Display]">Next Level</h3>
+              </div>
+              <p class="text-sm text-slate-300 mb-6">Discover premium fragrances curated just for you based on your preferences and order history.</p>
+              
+              {% if suggestions %}
+                <div class="space-y-3 mb-6">
+                  {% for suggestion in suggestions|slice:":3" %}
+                  <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex gap-3 hover:bg-white/20 transition">
+                    <div class="w-16 h-16 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
+                      {% if suggestion.img %}
+                      <img src="{{ suggestion.img.url }}" alt="{{ suggestion.name }}" class="w-full h-full object-cover rounded-lg">
+                      {% else %}
+                      <span class="text-2xl">🌸</span>
+                      {% endif %}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-semibold text-white truncate">{{ suggestion.name }}</h4>
+                      <p class="text-xs text-slate-300 mt-1">₹{{ suggestion.price }}</p>
+                      <a href="../view/{{ suggestion.pk }}" class="text-xs text-white underline mt-1 inline-block">Explore</a>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <!-- Sample Suggestions -->
+                <div class="space-y-3 mb-6">
+                  <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex gap-3 hover:bg-white/20 transition">
+                    <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center flex-shrink-0">
+                      <span class="text-2xl">🌺</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-semibold text-white truncate">Royal Essence</h4>
+                      <p class="text-xs text-slate-300 mt-1">₹4,999</p>
+                      <a href="../catalog/" class="text-xs text-white underline mt-1 inline-block">Explore</a>
+                    </div>
+                  </div>
+                  <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex gap-3 hover:bg-white/20 transition">
+                    <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center flex-shrink-0">
+                      <span class="text-2xl">🌷</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-semibold text-white truncate">Midnight Bloom</h4>
+                      <p class="text-xs text-slate-300 mt-1">₹3,499</p>
+                      <a href="../catalog/" class="text-xs text-white underline mt-1 inline-block">Explore</a>
+                    </div>
+                  </div>
+                  <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex gap-3 hover:bg-white/20 transition">
+                    <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                      <span class="text-2xl">🌹</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-semibold text-white truncate">Velvet Rose</h4>
+                      <p class="text-xs text-slate-300 mt-1">₹2,899</p>
+                      <a href="../catalog/" class="text-xs text-white underline mt-1 inline-block">Explore</a>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              
+              <a href="../catalog/" class="block w-full text-center px-4 py-2.5 rounded-full bg-white text-slate-900 font-medium hover:bg-slate-100 transition">
+                Browse All Premium
+              </a>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+              <h3 class="text-lg font-[Playfair_Display] text-slate-900 mb-4">Quick Actions</h3>
+              <div class="space-y-2">
+                <a href="../cart" class="block px-4 py-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm">
+                  View Cart
+                </a>
+                <a href="../wish/" class="block px-4 py-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm">
+                  My Wishlist
+                </a>
+                <a href="../orders/" class="block px-4 py-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm">
+                  All Orders
+                </a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Simple edit toggle functionality
+    document.getElementById('editBtn')?.addEventListener('click', function() {
+      const inputs = document.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        input.disabled = !input.disabled;
+        if (!input.disabled) {
+          input.focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

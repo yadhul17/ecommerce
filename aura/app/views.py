@@ -62,9 +62,8 @@ def index(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        
-
-        if(username=='admin'and password=='admin@123'):
+    users=User.objects.all()
+    if(users.username=='admin'and password=='admin@123'):
             return redirect("adminlist")
 
 
@@ -326,6 +325,9 @@ def viewall(request,id):
     return render(request,'view.html',{'data':data,'d':d})
 
 
+def profile(request):
+    return render (request,'profile.html')
+
 
 def register(request):
     if request.method == "POST":
@@ -376,8 +378,7 @@ def logout_view(request):
 #     return render(request,'cart.html',{'user':user,'d':d})
 
 
-from django.shortcuts import redirect, HttpResponse
-from django.contrib import messages
+
 
 def addtocart(request, id):
     if not request.user.is_authenticated:
@@ -427,8 +428,54 @@ def addtocart(request, id):
 
 
 
-def addtoWish(request,id):
+def addtoWish(request, id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    user = request.user
+
+    try:
+        perfume_obj = perfume.objects.get(id=id)
+    except perfume.DoesNotExist:
+        return HttpResponse("Perfume not found", status=404)
+
+    try:
+        details = PerfumeDetail.objects.get(perfume=perfume_obj)
+    except PerfumeDetail.DoesNotExist:
+        return HttpResponse("Product details not found", status=404)
+
+    Wish_item, created = Wish.objects.get_or_create(
+        users=user,           
+        perfume=perfume_obj
+    )
+
+    if created:
+        Wish_item.save()
+        messages.success(request, "Item added to wish successfully!")
+    else:
+        messages.info(request, "Item is already in your wishlist.")
+
     return redirect('home')
+
+def wish_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    user_id = request.user.id
+
+    if request.method == "POST":
+       
+        delete_id = request.POST.get("delete_id")
+        print(delete_id)
+        if delete_id:
+          Cart.objects.filter(id=delete_id).delete()
+            # After deletion, redirect to avoid resubmission
+          return redirect(wish_view)  # or the same URL name
+
+    # For GET or other methods: show cart
+    data = Wish.objects.filter(users_id=user_id)
+    print(data)
+    return render(request, 'wishlist.html', {'data': data})
 
 def cart_view(request):
     if not request.user.is_authenticated:

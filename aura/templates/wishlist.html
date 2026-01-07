@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA | Wishlist</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-900 font-[Inter]">
+  <main class="min-h-screen flex flex-col">
+    <nav class="sticky top-0 z-20 bg-white/95 border-b border-slate-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <a href="../.." class="flex items-center gap-2">
+          <div class="h-9 w-9 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm font-semibold tracking-[0.2em]">AU</div>
+          <div>
+            <p class="text-lg font-[Playfair_Display] tracking-[0.25em] leading-none">AURA</p>
+            <p class="text-[11px] text-slate-500">Perfume Studio</p>
+          </div>
+        </a>
+        <div class="hidden md:flex items-center gap-6 text-sm">
+          <a href="../.." class="text-slate-700 hover:text-slate-900">Home</a>
+          <a href="../catalog/" class="text-slate-700 hover:text-slate-900">Catalog</a>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <a href="../logout/" class="text-slate-700 hover:text-slate-900">Logout</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex-1 py-10 px-4 sm:px-6 lg:px-8">
+      <div class="w-[80%] mx-auto space-y-6">
+        <header class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Your wishlist</p>
+            <h1 class="text-2xl font-[Playfair_Display] text-slate-900">Items selected</h1>
+          </div>
+          <a href="../catalog/" class="text-sm text-slate-600 hover:text-slate-900 underline">Continue shopping</a>
+        </header>
+
+        <section class="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          {% if data %}
+          {% for i in data %}
+          <article class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
+            <div class="w-full h-60  bg-slate-100 overflow-hidden">
+              <img src="{{ i.perfume.img.url }}" alt="{{ i.perfume.name }}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 p-4 space-y-2 flex flex-col">
+              <h2 class="text-base font-semibold text-slate-900 line-clamp-1">{{ i.perfume.name }}</h2>
+              <p class="text-sm text-slate-600">₹{{ i.perfume.price }}</p>
+              <div class="mt-auto flex gap-3 pt-2 text-sm">
+                <a href="../buy/{{i.Perfume.perfume_id}}" class="flex-1 inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-800">Buy now</a>
+                <form method="post" class="flex-1 inline-flex items-center justify-center">
+                  {% csrf_token %}
+                  <input type="hidden" name="delete_id" value="{{ i.perfume.id }}">
+                  <button type="submit" class="w-full px-3 py-1.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100">Delete</button>
+                </form>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+          {% else %}
+          <!-- Sample Mode -->
+          <article class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
+            <div class="w-full h-60 bg-gradient-to-br from-slate-200 to-slate-300 overflow-hidden flex items-center justify-center">
+              <div class="text-slate-400 text-4xl">🌸</div>
+            </div>
+            <div class="flex-1 p-4 space-y-2 flex flex-col">
+              <h2 class="text-base font-semibold text-slate-900 line-clamp-1">Midnight Bloom</h2>
+              <p class="text-sm text-slate-600">₹2,499</p>
+              <div class="mt-auto flex gap-3 pt-2 text-sm">
+                <a href="../catalog/" class="flex-1 inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-800">Buy now</a>
+                <button class="flex-1 px-3 py-1.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100">Remove</button>
+              </div>
+            </div>
+          </article>
+          <article class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
+            <div class="w-full h-60 bg-gradient-to-br from-amber-200 to-amber-300 overflow-hidden flex items-center justify-center">
+              <div class="text-amber-400 text-4xl">🌺</div>
+            </div>
+            <div class="flex-1 p-4 space-y-2 flex flex-col">
+              <h2 class="text-base font-semibold text-slate-900 line-clamp-1">Golden Essence</h2>
+              <p class="text-sm text-slate-600">₹3,299</p>
+              <div class="mt-auto flex gap-3 pt-2 text-sm">
+                <a href="../catalog/" class="flex-1 inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-800">Buy now</a>
+                <button class="flex-1 px-3 py-1.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100">Remove</button>
+              </div>
+            </div>
+          </article>
+          <article class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
+            <div class="w-full h-60 bg-gradient-to-br from-purple-200 to-purple-300 overflow-hidden flex items-center justify-center">
+              <div class="text-purple-400 text-4xl">🌷</div>
+            </div>
+            <div class="flex-1 p-4 space-y-2 flex flex-col">
+              <h2 class="text-base font-semibold text-slate-900 line-clamp-1">Lavender Dreams</h2>
+              <p class="text-sm text-slate-600">₹1,899</p>
+              <div class="mt-auto flex gap-3 pt-2 text-sm">
+                <a href="../catalog/" class="flex-1 inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-800">Buy now</a>
+                <button class="flex-1 px-3 py-1.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100">Remove</button>
+              </div>
+            </div>
+          </article>
+          <article class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
+            <div class="w-full h-60 bg-gradient-to-br from-rose-200 to-rose-300 overflow-hidden flex items-center justify-center">
+              <div class="text-rose-400 text-4xl">🌹</div>
+            </div>
+            <div class="flex-1 p-4 space-y-2 flex flex-col">
+              <h2 class="text-base font-semibold text-slate-900 line-clamp-1">Rose Petals</h2>
+              <p class="text-sm text-slate-600">₹2,799</p>
+              <div class="mt-auto flex gap-3 pt-2 text-sm">
+                <a href="../catalog/" class="flex-1 inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-800">Buy now</a>
+                <button class="flex-1 px-3 py-1.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100">Remove</button>
+              </div>
+            </div>
+          </article>
+          {% endif %}
+        </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
