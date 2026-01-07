@@ -1,160 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA | Cart</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <main class="w-full h-auto bg-gradient-to-r from-purple-500 via-purple-500 to-white">
-        <nav class="w-full h-30 bg-white flex justify-center items-center border-b-1">
-            <div class="flex-1 ">
-                <h1 class="font-serif text-3xl antialiased text-black  px-10 text-center">AURA</h1>
-
-            </div>
-            <div class="flex-2 flex gap-x-8 ">
-                <a href="../.."
-                    class="text-black hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg">
-                    Home
-                </a>
-                
-                   <h1 class="text-black hover:underline hover:decoration-white transition duration-300 ease-in-out text-lg">
-                    Catalog</h1>
-                
-            </div>
-
-            <!-- <div class="flex-2 text-white flex justify-center gap-x-7 text-black">
-                <span class="material-symbols-outlined">
-                    search
-                </span>
-
-                <span class="material-symbols-outlined">
-                    local_mall
-                </span> -->
-
-                <!-- <div>
-    <ul>
-  <li class="relative group/nav">
-    <h1 class="block px-4 py-2 text-lg text-black cursor-pointer hover:underline mr-60">
-      Filter
-    </h1>
-
-    <ul class="absolute top-full left-0 w-40 bg-white bg-opacity-10 border rounded shadow-lg hidden group-hover/nav:block z-20">
-      PRICE menu item with fly-out form
-      <li class="relative group/price">
-        <a href="#"
-           class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
-          PRICE
+<body class="bg-slate-50 text-slate-900 font-[Inter]">
+  <main class="min-h-screen flex flex-col">
+    <nav class="sticky top-0 z-20 bg-white/95 border-b border-slate-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <a href="../.." class="flex items-center gap-2">
+          <div class="h-9 w-9 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm font-semibold tracking-[0.2em]">AU</div>
+          <div>
+            <p class="text-lg font-[Playfair_Display] tracking-[0.25em] leading-none">AURA</p>
+            <p class="text-[11px] text-slate-500">Perfume Studio</p>
+          </div>
         </a>
+        <div class="hidden md:flex items-center gap-6 text-sm">
+          <a href="../.." class="text-slate-700 hover:text-slate-900">Home</a>
+          <a href="../catalog/" class="text-slate-700 hover:text-slate-900">Catalog</a>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <a href="../logout/" class="text-slate-700 hover:text-slate-900">Logout</a>
+        </div>
+      </div>
+    </nav>
 
-        <!-- Fly-out form submenu to the right -->
-        <!-- <form  id="priceForm" action="../catalog/" method="post"
-              class="hidden group-hover/price:block focus-within:block absolute top-0 left-[90%] ml-1 bg-white border p-2 z-30">
-              {% csrf_token %}
-          <input type="number" required name="value1" maxlength="4" size="3" 
-                 class="border text-black" >
-          <span class="text-black">to</span>
-          <input type="number" required name="value2" maxlength="4" size="3"
-                 class="border text-black">
-          <input type="submit" value="Submit" 
-                 class="bg-blue-500 text-white p-2 mt-2 w-full">
-        </form>
-      </li>
+    <div class="flex-1 py-10 px-4 sm:px-6 lg:px-8">
+      <div class="w-[80%] mx-auto space-y-6">
+        <header class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Your cart</p>
+            <h1 class="text-2xl font-[Playfair_Display] text-slate-900">Items selected</h1>
+          </div>
+          <a href="../catalog/" class="text-sm text-slate-600 hover:text-slate-900 underline">Continue shopping</a>
+        </header>
 
-       <li class="relative group/price">
-  <a href="#"
-     class="block py-2 px-4 text-gray-700 hover:bg-gray-100">
-    QUANTITY
-  </a> -->
-
-  <!-- Fly-out form submenu to the right -->
-
-
-            
-
-        </nav>
-<div class="w-full h-30 flex items-center justify-center bg-gradient-to-r from-purple-500 via-purple-500 to-white p-6">
-  <div class="w-[70%] bg-white rounded-2xl shadow-lg font-serif text-3xl px-6 py-4 inline-flex items-center space-x-2">
-    <span class="text-gray-700">hiii <span class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent uppercase">{{ user }},</span></span>
-    <h1><span class="inline-flex space-x-0">
-      <span class="text-pink-500">w</span>
-      <span class="text-rose-500">e</span>
-      <span class="text-purple-500">l</span>
-      <span class="text-indigo-500">c</span>
-      <span class="text-blue-400">o</span>
-      <span class="text-teal-400">m</span>
-      <span class="text-green-500">e</span>
-    </span>
-    </h1>
-    <span class="text-gray-700">to your cart</span>
-  </div>
-</div>
-
-<!-- <div class="text-white">
-{% for item in data %}
-  <div>
-    <p>{{ item.name }} — {{ item.quantity }} — {{ item.price }}</p>
-  </div>
-{% empty %}
-  <p>No items in cart.</p>
-{% endfor %}
-</div> -->
-
- <div class="w-full  h-auto flex flex-col  items-center pt-4  pb-10">
-        <p class="text-blue-300 mr-[70%] "></p>
-        <div class="w-[80%] mx-auto grid grid-cols-3 gap-5 p-1 ">
-  {% for i in data %}
-  <div class="relative group overflow-hidden  h-130 bg-white">
-  <img src="{{ i.img.url }}"
-       alt=""
-       class="w-full h-100 object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"/>
-  
-  <!-- <a href="../view/{{ i.pk }}"
-     class="absolute top-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-3 py-1 rounded-full transition">
-    View Details
-  </a> -->
- <h1 class="text-2xl font-serif ml-2 text-black  mt-2">
-  {{ i.name }}
-</h1>
-<div class="w-full h-15  flex">
-  <div class="flex-1 flex justify-center items-center mt-3">
-<h1 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">
-  Price: {{ i.price }}/-
-</h1>
-  </div>
-  
-   <div class="flex-1 flex justify-center items-center">
-    <a href="../buy/{{i.product_id}}">
-    <h1 class="bg-blue-600 text-white p-2 rounded ">BUY NOW</h1>
-    </a>
-   
-
-  </div>
- <!-- <div class="flex-1 flex justify-center items-center">
-    <a href="../cart/delete/{{i.pk}}">
-    <h1 class="bg-red-600 text-white p-2 rounded ">DELETE</h1>
-    </a>
-   
-
-  </div> -->
-  <div class="flex-1 flex justify-center items-center">
-  <form method="post" >
-      {% csrf_token %}
-      <input type="hidden" name="delete_id" value="{{ i.id }}">
-      <button type="submit" class="text-red-500">Delete</button>
-    </form>
+        <section class="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          {% if data %}
+          {% for i in data %}
+          <article class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
+            <div class="w-full h-60  bg-slate-100 overflow-hidden">
+              <img src="{{ i.img.url }}" alt="{{ i.name }}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 p-4 space-y-2 flex flex-col">
+              <h2 class="text-base font-semibold text-slate-900 line-clamp-1">{{ i.name }}</h2>
+              <p class="text-sm text-slate-600">₹{{ i.price }}</p>
+              <div class="mt-auto flex gap-3 pt-2 text-sm">
+                <a href="../buy/{{i.product_id}}" class="flex-1 inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-800">Buy now</a>
+                <form method="post" class="flex-1 inline-flex items-center justify-center">
+                  {% csrf_token %}
+                  <input type="hidden" name="delete_id" value="{{ i.id }}">
+                  <button type="submit" class="w-full px-3 py-1.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100">Delete</button>
+                </form>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+          {% else %}
+          <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 text-center text-sm text-slate-600">Your cart is empty.</div>
+          {% endif %}
+        </section>
+      </div>
     </div>
-
-</div>
-
-</div>
-
-  {% endfor %}
-</div>
-
-    </main>
-    
+  </main>
 </body>
 </html>

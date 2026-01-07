@@ -22,8 +22,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.home),
-    path('adlogin/',views.adminlogin),
+    path('',views.home ,name='home'),
+    # path('adlogin/',views.adminlogin),
     path('adds/',views.adddetails),
     path('new/',views.adddetail),
     path('catalog/', views.catalogs),  
@@ -36,9 +36,20 @@ urlpatterns = [
     path('login/',views.login_view),
     path('logout/',views.logout_view),
     path('cart/<int:id>',views.addtocart),
+    path('wish/<int:id>',views.addtoWish),
     path('cart/',views.cart_view),
-    path('cart/',views.serch),
-    path('buy/<int:id>/',views.buynows,name='buynows')
+    path('catalog/',views.serch),
+    path('buy/<int:id>/',views.buynows,name='buynows'),
+    path("adminpage/", views.index, name="admin_login"),
+    path("adminpage/dashboard/", views.adminlist, name="adminlist"),
+    path("adminpage/dashboard/products/", views.allproduct, name="all_products"),
+    path("adminpage/dashboard/products/add", views.admin_perfume_add, name="addproduct"),
+    path("adminpage/perfume/delete/<int:pk>/", views.admin_perfume_delete, name="admin_perfume_delete"),
+    path("adminpage/dashboard/users/", views.alluser,name='users'),
+    path("adminpage/dashboard/orders/", views.allorder,name='orders'),
+
+
+    
     
 
     

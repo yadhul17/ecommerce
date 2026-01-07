@@ -62,6 +62,14 @@ class Order(models.Model):
     quantity=models.IntegerField()
     img=models.FileField()
 
+class Wish(models.Model):
+    users=models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='users',null=True, blank=True)
+    perfume = models.ForeignKey(perfume, on_delete=models.CASCADE,related_name='perfume',null=True,blank=True)
+    notified = models.BooleanField(default=False)
+
     
 
 

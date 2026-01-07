@@ -12,16 +12,117 @@ from django.shortcuts import get_object_or_404
 from datetime import date, timedelta
 from django.db.models import F
 from django.core.mail import send_mail
+from django.http import JsonResponse
+
 
 User = get_user_model()
 
+# admin
+
+# def admin_dashboard(request):
+#     return render(request, "dashboard.html")
+
+# def admin_perfume_list(request):
+#     perfumes = perfume.objects.all()
+#     return render(request, "admin/perfume_list.html", {"perfumes": perfumes})
+
+# # Add perfume
+# def admin_perfume_add(request):
+#     form = PerfumeForm(request.POST or None, request.FILES or None)
+#     if request.method == "POST" and form.is_valid():
+#         form.save()
+#         return redirect("admin_perfume_list")
+#     return render(request, "admin/perfume_form.html", {"form": form})
+
+# # Edit perfume
+# def admin_perfume_edit(request, pk):
+#     item = get_object_or_404(perfume, pk=pk)
+#     form = PerfumeForm(request.POST or None, request.FILES or None, instance=item)
+#     if request.method == "POST" and form.is_valid():
+#         form.save()
+#         return redirect("admin_perfume_list")
+#     return render(request, "admin/perfume_form.html", {"form": form})
+
+# # Delete perfume
+# def admin_perfume_delete(request, pk):
+#     item = get_object_or_404(perfume, pk=pk)
+#     if request.method == "POST":
+#         item.delete()
+#         return redirect("admin_perfume_list")
+#     return render(request, "admin/confirm_delete.html", {"item": item})
 
 
 
 
+
+
+def index(request):
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        
+
+        if(username=='admin'and password=='admin@123'):
+            return redirect("adminlist")
+
+
+        # If credentials are correct and user is staff, log them in
+       
+    return render(request,"dashboard.html")
+
+def adminlist(request):
+    return render (request,'adminview.html')
+   
+def allproduct(request):
+    products = perfume.objects.all()
+    return render(request, "allproduct.html", {"products": products})
+def admin_perfume_add(request):
+    if request.method=='POST':
+        file1 = request.FILES.get('image')
+        name = request.POST['name']
+        price = request.POST['price']
+        about = request.POST['about']
+        gender = request.POST['gender']
+        stock = request.POST['stock']
+
+        data = perfume.objects.create(img=file1, name=name, price=price)
+        PerfumeDetail.objects.create(perfume=data, about=about, gender=gender, stock=stock)
+
+        return redirect('adminlist')
+    return render(request,"adds.html")
+def admin_perfume_edit(request):
+    return render(request,"dashboard.html")
+def admin_perfume_delete(request, pk):
+    # fetch the object (or return 404 if not found)
+    obj = get_object_or_404(perfume, pk=pk)
+    
+    # only delete on POST
+    if request.method == "POST":
+        obj.delete()
+        return redirect("adminlist")  # redirect to products page
+
+    # (Optional) If you want a confirmation page:
+    return render(request, "allproduct.html", {"object": obj})
+
+
+
+def alluser(request):
+    users=User.objects.all()
+    
+    return render(request,'users.html',{"users":users})
+
+def allorder(request):
+    orders=Order.objects.all()
+    
+    
+    return render(request,'orderss.html',{"orders":orders})
 # Create your views here.
 def home(request):
-    data = perfume.objects.all().prefetch_related('details')[:4]
+    data = perfume.objects.all().order_by('-id')[:4]  # e.g. last 4 entries
+    data = data.prefetch_related('details')
+
     d=new.objects.all()[:4]
     user = request.user
     print(user)
@@ -36,25 +137,30 @@ def home(request):
     return render(request ,'home.html',{'data':data,'d':d})
 
 
-def adminlogin(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-        try:
-            user = User.objects.get(email=email)
-            print(user.email)
-        except User.DoesNotExist:
-            user = None
+# def adminlogin(request):
+#     if request.method == 'POST':
+#         email = request.POST['email']
+#         password = request.POST['password']
+#         try:
+#             user = User.objects.get(email=email)
+#             print(user.email)
+#         except User.DoesNotExist:
+#             user = None
 
-        if user is not None and user.check_password(password):
-            login(request,user)
-            return redirect(adddetails)
+#         if user is not None and user.check_password(password):
+#             login(request,user)
+#             return redirect(adddetails)
            
 
-    return render(request, 'admin.html')
+#     return render(request, 'admin.html')
+# def adminlogin(request):
+#     user = request.user
+#     if user is not None:
+#         return render(request,'')
+
 def adddetail(request):
     if not request.user.is_authenticated:   
-        return redirect(adminlogin)
+        return redirect(login_view)
     else:
         if request.method=='POST':
             file1=request.FILES.get('image')
@@ -75,7 +181,7 @@ def adddetail(request):
 
 def adddetails(request):
     if not request.user.is_authenticated:   
-        return redirect(adminlogin)
+        return redirect(login_view)
     else:
         if request.method=='POST':
             file1=request.FILES.get('image')
@@ -117,29 +223,40 @@ def catalogs(request):
             
 
 
+
+
 def quantity(request):
+    perfumes = perfume.objects.all()  # always return queryset
+
     if request.method == 'POST':
-        min_q = 0
-        max_q = int(request.POST.get('value3', 0))
-        print(max_q)
+        try:
+            max_stock = int(request.POST.get('value3', 0))
+        except ValueError:
+            max_stock = 0
 
-        data = perfume.objects.filter(quantity__gte=min_q, quantity__lte=max_q)
-        
-        
+        perfumes = perfumes.filter(details__stock__lte=max_stock)
+        print(perfumes)
+        if perfumes.exists():
+                context = {
+                'head': 'for all customers',
+                'data': perfumes,
+                    }
+                return render(request, 'catalog.html', context)
+        else:
+                context = {'message': 'No items found in at this particular range'}
+                return render(request, 'catalog.html', context)
 
-        return render(request, 'catalog.html', {
-            'perfumes': data,
-            
-        })
-    return render(request, 'catalog.html')
+
+   
+
 
     
-def serch(request):
-    if request.method=='POST':
-        value=request.POST.get['q']
-        print(value)
+# def serch(request):
+#     if request.method=='POST':
+#         value=request.POST.get['q']
+#         print(value)
 
-    return render(request,'catalog.html')         
+#     return render(request,'catalog.html')         
 
                      
                  
@@ -223,21 +340,19 @@ def register(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            print(password)
-            user = authenticate(request, username=username, password=password)  # check credentials
-            if user is not None:
-                login(request, user)  # log the user in
-                messages.success(request, 'Logged in successfully!')
-                return redirect(home)  # or any success URL
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            if user.is_staff:   # or user.is_superuser, or your own role flag
+                return redirect(adddetails)
             else:
-                messages.error(request, 'Invalid username or password')
-    else:
-        form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+                return redirect(home)
+        else:
+            messages.error(request, 'Invalid credentials')
+    return render(request,'login.html')
+    
 
 
 def logout_view(request):
@@ -261,38 +376,59 @@ def logout_view(request):
 #     return render(request,'cart.html',{'user':user,'d':d})
 
 
+from django.shortcuts import redirect, HttpResponse
+from django.contrib import messages
+
 def addtocart(request, id):
     if not request.user.is_authenticated:
         return redirect('login')
 
     user = request.user
+
+    # try to get the perfume
     try:
         perfume_obj = perfume.objects.get(id=id)
     except perfume.DoesNotExist:
         return HttpResponse("Perfume not found", status=404)
-    
+
+    # now get the related perfume details
+    try:
+        details = PerfumeDetail.objects.get(perfume=perfume_obj)
+    except PerfumeDetail.DoesNotExist:
+        return HttpResponse("Product details not found", status=404)
+
+    # check stock
+    if details.stock <= 0:
+        messages.error(request, "Sorry! This product is out of stock.")
+        return redirect('home',)
+
+    # proceed with adding to cart
     name = perfume_obj.name
     price = perfume_obj.price
     img = perfume_obj.img
-    product_id=id
-    print(product_id)
+    product_id = id
 
     cart_item, created = Cart.objects.get_or_create(
         user=user,
         name=name,
-        defaults={'price': price, 'img': img,'product_id':product_id}
+        defaults={'price': price, 'img': img, 'product_id': product_id}
     )
 
     if created:
+        # optionally reduce stock in perfumedetails
+        
         cart_item.save()
+
         messages.success(request, "Item added to cart successfully!")
     else:
         messages.info(request, "Item is already in your cart.")
 
-    # It’s better to redirect after POST, to avoid resubmission on refresh
-    return redirect(home)
+    return redirect('home')
 
 
+
+def addtoWish(request,id):
+    return redirect('home')
 
 def cart_view(request):
     if not request.user.is_authenticated:
@@ -371,3 +507,22 @@ def buynows(request,id):
                 )
                  return redirect(home)
     return  render(request,'buynow.html',{'product':product,'details':details,'today':today,'fdate':fdate,'messages':messages,})
+
+
+# serch
+from django.db.models import Q
+
+def serch(request):
+    query = request.GET.get('q', '').strip()
+    print(query)
+
+    if query:
+        data = perfume.objects.filter(name__icontains=query)
+        if not data.exists():
+            print("no related data")
+        else:
+            print("Found:", data)
+    else:
+        data = perfume.objects.all()
+
+    return render(request, 'catalog.html', {'results': data, 'query': query})

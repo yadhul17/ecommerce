@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin — All Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <div class="container mx-auto px-4 py-6">
+
+    <!-- header area: title + button aligned -->
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-3xl font-bold text-gray-800">All Products</h2>
+      <a href="{% url 'addproduct' %}"
+         class="bg-green-600 text-white px-5 py-2 rounded-lg shadow hover:bg-green-700 transition duration-200">
+        + Add Product
+      </a>
+    </div>
+
+    <!-- products grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 place-items-center">
+
+      {% for p in products %}
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 w-full max-w-xs">
+
+        {% if p.img %}
+        <img src="{{ p.img.url }}" alt="{{ p.name }}" class="w-full h-48 object-cover">
+        {% else %}
+        <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400">
+          No Image
+        </div>
+        {% endif %}
+
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-900">{{ p.name }}</h3>
+          <p class="text-gray-600 mt-1 font-medium">₹ {{ p.price }}</p>
+          
+          <div class="mt-4 flex justify-between items-center">
+            
+            <form method="post" action="{% url 'admin_perfume_delete' p.id %}">
+              {% csrf_token %}
+              <button type="submit"
+                      class="text-sm text-red-600 hover:text-red-800 font-semibold">
+                Delete
+              </button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+
+    {% if products|length == 0 %}
+      <p class="text-center text-gray-600 mt-8 text-lg">No products found.</p>
+    {% endif %}
+
+  </div>
+
+</body>
+</html>

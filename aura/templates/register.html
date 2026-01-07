@@ -1,73 +1,58 @@
 {% load widget_tweaks %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA | Register</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Register — Perfume Boutique</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 </head>
-<body class="min-h-screen bg-gradient-to-br from-pink-50 via-lavender-100 to-indigo-200 flex items-center justify-center p-6">
+<body class="min-h-screen bg-slate-50 text-slate-900 font-[Inter]">
+  <main class="min-h-screen flex items-center justify-center px-4 py-10">
+    <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-sm p-7">
+      <div class="text-center mb-6">
+        <p class="text-xs uppercase tracking-[0.25em] text-slate-500 mb-1">Aura</p>
+        <h1 class="text-2xl font-[Playfair_Display] text-slate-900">Create account</h1>
+        <p class="text-sm text-slate-600">Join to shop and save your favorites</p>
+      </div>
 
-  <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-8 w-full max-w-md">
-    <div class="text-center mb-6">
-      <h1 class="text-3xl font-bold text-indigo-700">Join Us</h1>
-      <p class="text-sm text-gray-600">Create your account to explore exclusive perfumes</p>
+      <form method="post" novalidate class="space-y-4">
+        {% csrf_token %}
+
+        <div class="space-y-1">
+          <label for="{{ form.username.id_for_label }}" class="text-sm font-medium text-slate-700">{{ form.username.label }}</label>
+          {{ form.username|add_class:"w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white" }}
+          {% if form.username.errors %}
+            <p class="text-red-600 text-xs mt-1">{{ form.username.errors|join:", " }}</p>
+          {% endif %}
+        </div>
+
+        <div class="space-y-1">
+          <label for="{{ form.email.id_for_label }}" class="text-sm font-medium text-slate-700">{{ form.email.label }}</label>
+          {{ form.email|add_class:"w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white" }}
+          {% if form.email.errors %}
+            <p class="text-red-600 text-xs mt-1">{{ form.email.errors|join:", " }}</p>
+          {% endif %}
+        </div>
+
+        <div class="space-y-1">
+          <label for="{{ form.password1.id_for_label }}" class="text-sm font-medium text-slate-700">{{ form.password1.label }}</label>
+          {{ form.password1|add_class:"w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white" }}
+          {% if form.password1.errors %}
+            <p class="text-red-600 text-xs mt-1">{{ form.password1.errors|join:", " }}</p>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="w-full rounded-lg bg-slate-900 text-white py-2.5 text-sm font-semibold hover:bg-slate-800">Register</button>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-slate-600">Already have an account?
+        <a href="../login/" class="text-slate-900 font-medium hover:underline">Log in</a>
+      </p>
     </div>
-
-    <form method="post" novalidate class="space-y-5">
-      {% csrf_token %}
-
-      <!-- Username -->
-      <div>
-        <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">
-          {{ form.username.label }}
-        </label>
-        {{ form.username|add_class:"mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-400 focus:border-transparent focus:outline-none bg-white" }}
-        {% if form.username.errors %}
-          <p class="text-red-600 text-xs mt-1">{{ form.username.errors|join:", " }}</p>
-        {% endif %}
-      </div>
-
-      <!-- Email -->
-      <div>
-        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">
-          {{ form.email.label }}
-        </label>
-        {{ form.email|add_class:"mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-400 focus:border-transparent focus:outline-none bg-white" }}
-        {% if form.email.errors %}
-          <p class="text-red-600 text-xs mt-1">{{ form.email.errors|join:", " }}</p>
-        {% endif %}
-      </div>
-
-      <!-- Password -->
-      <div>
-        <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">
-          {{ form.password1.label }}
-        </label>
-        {{ form.password1|add_class:"mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-400 focus:border-transparent focus:outline-none bg-white" }}
-        {% if form.password1.errors %}
-          <p class="text-red-600 text-xs mt-1">{{ form.password1.errors|join:", " }}</p>
-        {% endif %}
-      </div>
-
-      <!-- Submit Button -->
-      <div>
-        <button
-          type="submit"
-          class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300"
-        >
-          Register
-        </button>
-      </div>
-    </form>
-
-    <p class="mt-6 text-center text-gray-600 text-sm">
-      Already have an account?
-      <a href="../login/" class="text-indigo-600 hover:underline">Log in</a>
-    </p>
-  </div>
-
+  </main>
 </body>
 </html>
