@@ -134,5 +134,5 @@ EMAIL_HOST = 'smtp.gmail.com'        # e.g., smtp.gmail.com, smtp.sendgrid.net
 EMAIL_PORT = 587                            # typical TLS port
 EMAIL_USE_TLS = True                        # use TLS for encryption
 EMAIL_USE_SSL = False                       # if using SSL instead of TLS, adjust accordingly
-EMAIL_HOST_USER = 'yadhuljayakumar@gmail.com'      # e.g., your email address or API username
-EMAIL_HOST_PASSWORD = 'tlmv vnqf ozhn vqor'
+EMAIL_HOST_USER = ''      # e.g., your email address or API username
+EMAIL_HOST_PASSWORD = ''
