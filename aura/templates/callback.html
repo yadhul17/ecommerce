@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% if status == "Success" %}
+    <meta http-equiv="refresh" content="5;url={% url 'profile' %}">
+    {% endif %}
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+
+    <div class="max-w-md w-full bg-white shadow-2xl rounded-2xl p-10 text-center">
+        
+        {% if status == "Success" %}
+            <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6">
+                <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Payment Successful!</h2>
+            <p class="text-gray-600 mb-6">Thank you for your purchase. Your order is being processed.</p>
+            <p class="text-sm text-gray-400 italic">Redirecting to your profile in 5 seconds...</p>
+            
+            <a href="/" class="mt-8 inline-block w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition">
+                Go to Home
+            </a>
+
+        {% elif status == "Failed" %}
+            <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-red-100 mb-6">
+                <svg class="h-10 w-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Payment Failed</h2>
+            <p class="text-gray-600 mb-6">Something went wrong with your transaction. No money was deducted.</p>
+            
+            <a href="{% url 'payment' %}" class="mt-8 inline-block w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition">
+                Try Again
+            </a>
+
+        {% else %}
+            <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-yellow-100 mb-6">
+                <svg class="h-10 w-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Invalid Request</h2>
+            <p class="text-gray-600 mb-6">We couldn't verify this payment session.</p>
+            <a href="{% url 'home' %}" class="text-indigo-600 font-semibold hover:underline">Return Home</a>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>

@@ -30,12 +30,16 @@ urlpatterns = [
     path('catalog/',views.quantity),
     path('catalog/men', views.men), 
     path('catalog/women', views.women), 
+    path('cancel-order/<int:id>/', views.cancel_order, name='cancel_order'),
+
     path('catalog/unisex', views.unisex),  
     path('view/<int:id>',views.viewall),
-    path('register/',views.register),
-    path('login/',views.login_view),
+    path('register/',views.register,name="register"),
+    path('login/',views.login_view,name="login"),
     path('logout/',views.logout_view),
-    path('profile/',views.profile),
+    path('profile/',views.profile,name="profile"),
+    path('payment/',views.payments,name="payment"),
+    path('razorpay/callback/',views.callback),
     path('cart/<int:id>',views.addtocart),
     path('wish/<int:id>',views.addtoWish),
     path('wish/',views.wish_view),
@@ -49,6 +53,7 @@ urlpatterns = [
     path("adminpage/perfume/delete/<int:pk>/", views.admin_perfume_delete, name="admin_perfume_delete"),
     path("adminpage/dashboard/users/", views.alluser,name='users'),
     path("adminpage/dashboard/orders/", views.allorder,name='orders'),
+    path('update-status/<int:id>',views.update_order_status, name='update_order_status'),
 
 
     

@@ -3,11 +3,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField(required=True)  # adding email
+    email = forms.EmailField(required=True)
 
-    class Meta:
+    class Meta(UserCreationForm.Meta): # <--- 1. Inherit from UserCreationForm.Meta
         model = User
-        fields = ['username', 'email', 'password1']
+        fields = ("username", "email")
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=150)

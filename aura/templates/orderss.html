@@ -131,36 +131,29 @@
                                     <div class="text-sm text-slate-400">—</div>
                                 {% endif %}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                {% if order.delivered_date %}
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        Delivered
-                                    </span>
-                                {% else %}
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                                        </svg>
-                                        Pending
-                                    </span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="9" class="px-6 py-12 text-center">
-                                <div class="text-slate-400">
-                                    <svg class="mx-auto h-12 w-12 text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                <form method="POST" action="{% url 'update_order_status' order.id %}" class="flex items-center gap-2">
+                                                                    {% csrf_token %}
+                                
+                                
+                                <select name="new_status" class="text-xs font-semibold rounded-lg border-slate-300 focus:ring-blue-500 focus:border-blue-500 p-1 bg-slate-50 text-slate-700">
+                                    <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                    <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+                                    <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                                    <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                                    <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                                </select>
+
+                                <button type="submit" class="p-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition shadow-sm" title="Update Status">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
-                                    <p class="text-lg font-medium text-slate-500">No orders found</p>
-                                    <p class="text-sm text-slate-400 mt-1">There are no orders in the system yet.</p>
-                                </div>
+                                </button>
+                            </form>
                             </td>
                         </tr>
+                       
+                        
                         {% endfor %}
                     </tbody>
                 </table>
