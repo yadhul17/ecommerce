@@ -2,145 +2,97 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AURA | Checkout</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-slate-50 text-slate-900 font-[Inter]">
-  <main class="min-h-screen py-10 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-6xl mx-auto">
-      <header class="mb-8">
-        <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Checkout</p>
-        <h1 class="text-3xl font-[Playfair_Display] text-slate-900">Billing & Review</h1>
-      </header>
 
-      {% for i in product %}
-      <div class="grid gap-6 lg:grid-cols-3">
-        <section class="lg:col-span-2 bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-          <h2 class="text-xl font-semibold text-slate-900 mb-4">Billing details</h2>
-          <form method="POST" action="/buy/{{i.pk}}/" class="space-y-4">
-            {% csrf_token %}
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <label class="text-sm font-medium text-slate-700">Full Name</label>
-                <input name="name" type="text" required class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-              </div>
-              <div class="space-y-1">
-                <label class="text-sm font-medium text-slate-700">Email</label>
-                <input name="email" type="email" required class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-              </div>
-            </div>
+<body class="bg-slate-50">
+<main class="min-h-screen py-10 px-4">
+<div class="max-w-6xl mx-auto">
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div class="space-y-1">
-                <label class="text-sm font-medium text-slate-700">Gender</label>
-                <input name="gender" type="text" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-              </div>
-              <div class="space-y-1">
-                <label class="text-sm font-medium text-slate-700">State</label>
-                <input name="state" type="text" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-              </div>
-              <div class="space-y-1">
-                <label class="text-sm font-medium text-slate-700">District</label>
-                <input name="district" type="text" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-              </div>
-            </div>
+<h1 class="text-3xl font-bold mb-6">Checkout</h1>
 
-            <div class="space-y-1">
-              <label class="text-sm font-medium text-slate-700">Address</label>
-              <textarea name="address" rows="3" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white"></textarea>
-            </div>
+<div class="grid lg:grid-cols-3 gap-6">
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div class="space-y-1">
-                <label class="text-sm font-medium text-slate-700">Pincode</label>
-                <input name="pincode" type="text" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-              </div>
-              <div class="space-y-1">
-                <label class="text-sm font-medium text-slate-700">Landmark</label>
-                <input name="landmark" type="text" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-              </div>
-            </div>
+<!-- ================= FORM ================= -->
+<section class="lg:col-span-2 bg-white p-6 rounded-xl shadow">
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <label class="text-sm font-medium text-slate-700">Quantity</label>
-                <input name="quantity" type="number" min="1" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <div class="space-y-1">
-                  <label class="text-sm font-medium text-slate-700">Order date</label>
-                  <input name="odate" type="text" value="{{today}}" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-                </div>
-                <div class="space-y-1">
-                  <label class="text-sm font-medium text-slate-700">Delivery date</label>
-                  <input name="ddate" type="text" value="{{fdate}}" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white">
-                </div>
-              </div>
-            </div>
+<form method="POST" action="/buy/{{ product.pk }}/" class="space-y-4">
+{% csrf_token %}
 
-            <div class="space-y-3">
-              <label class="text-sm font-medium text-slate-700">Payment Method</label>
-              <div class="flex flex-col sm:flex-row gap-3">
-                <label class="flex items-center gap-3 p-4 rounded-lg border border-slate-200 bg-slate-50 cursor-pointer hover:border-slate-400 transition-colors has-[:checked]:border-slate-900 has-[:checked]:bg-slate-100">
-                  <input type="radio" name="payment_mode" value="cod" checked class="w-4 h-4 text-slate-900 border-slate-300 focus:ring-slate-900">
-                  <div>
-                    <p class="text-sm font-semibold text-slate-900">Cash on Delivery</p>
-                    <p class="text-xs text-slate-500">Pay when you receive</p>
-                  </div>
-                </label>
-                <label class="flex items-center gap-3 p-4 rounded-lg border border-slate-200 bg-slate-50 cursor-pointer hover:border-slate-400 transition-colors has-[:checked]:border-slate-900 has-[:checked]:bg-slate-100">
-                  <input type="radio" name="payment_mode" value="card_upi" class="w-4 h-4 text-slate-900 border-slate-300 focus:ring-slate-900">
-                  <div>
-                    <p class="text-sm font-semibold text-slate-900">Card / UPI</p>
-                    <p class="text-xs text-slate-500">Pay online securely</p>
-                  </div>
-                </label>
-              </div>
-            </div>
+<!-- Name & Email -->
+<div class="grid sm:grid-cols-2 gap-4">
+  <input name="name" type="text" placeholder="Full Name" required class="border p-2 rounded">
+  <input name="email" type="email" placeholder="Email" required class="border p-2 rounded">
+</div>
 
-            <button type="submit" class="w-full rounded-lg bg-slate-900 text-white py-3 text-sm font-semibold hover:bg-slate-800">Place Order</button>
-          </form>
-        </section>
+<!-- Gender -->
+<input name="gender" type="text" placeholder="Gender" class="border p-2 rounded w-full">
 
-        <aside class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 space-y-6">
-          <div class="flex gap-4">
-            <div class="w-28 h-28 rounded-lg overflow-hidden bg-slate-100">
-              <img src="{{ i.img.url }}" alt="{{ i.name }}" class="w-full h-full object-cover">
-            </div>
-            <div class="flex-1 space-y-1">
-              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Product</p>
-              <h3 class="text-lg font-semibold text-slate-900">{{ i.name }}</h3>
-              <p class="text-sm text-slate-600">₹ {{ i.price }}</p>
-            </div>
-          </div>
+<!-- State & District -->
+<div class="grid sm:grid-cols-2 gap-4">
+  <input name="state" type="text" placeholder="State" required class="border p-2 rounded">
+  <input name="district" type="text" placeholder="District" required class="border p-2 rounded">
+</div>
 
-          <div class="space-y-3">
-            {% for detail in details %}
-            <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
-              <div class="flex items-center justify-between text-sm text-slate-700">
-                <span>Stock available</span>
-                <span class="font-semibold">{{ detail.stock }}</span>
-              </div>
-              <div class="flex items-center justify-between text-sm text-slate-700 mt-2">
-                <span>Price</span>
-                <span class="font-semibold">₹ {{ i.price }}</span>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
+<!-- Address -->
+<textarea name="address" placeholder="Full Address" required class="border p-2 rounded w-full"></textarea>
 
-          <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
-            <p class="font-semibold mb-1">Payment Options</p>
-            <p>We accept Cash on Delivery and Card/UPI payments.</p>
-          </div>
-        </aside>
-      </div>
-      {% endfor %}
-    </div>
-  </main>
+<!-- Pincode & Landmark -->
+<div class="grid sm:grid-cols-2 gap-4">
+  <input name="pincode" type="text" placeholder="Pincode" required class="border p-2 rounded">
+  <input name="landmark" type="text" placeholder="Landmark" class="border p-2 rounded">
+</div>
+
+<!-- Quantity -->
+<input name="quantity" type="number" min="1" required placeholder="Quantity"
+       class="border p-2 rounded w-full">
+
+<!-- Hidden Order Dates -->
+<input type="hidden" name="odate" value="{{ today }}">
+<input type="hidden" name="ddate" value="{{ fdate }}">
+
+<!-- Payment Mode -->
+<div class="space-y-2">
+  <label class="block font-semibold">Payment Method</label>
+
+  <label class="flex items-center gap-2">
+    <input type="radio" name="payment_mode" value="COD" checked>
+    Cash On Delivery
+  </label>
+
+ 
+
+  <label class="flex items-center gap-2">
+    <input type="radio" name="payment_mode" value="UPI">
+    UPI
+  </label>
+</div>
+
+<button type="submit"
+class="bg-black text-white w-full py-3 rounded-lg mt-4">
+Place Order
+</button>
+
+</form>
+</section>
+
+<!-- ================= SUMMARY ================= -->
+<aside class="bg-white p-6 rounded-xl shadow">
+
+<img src="{{ product.img.url }}" class="w-40 h-40 object-cover rounded mb-4">
+
+<h2 class="text-xl font-semibold">{{ product.name }}</h2>
+<p class="text-gray-600">₹ {{ product.price }}</p>
+
+<div class="mt-4 border-t pt-4">
+  <p>Stock: <strong>{{ details.stock }}</strong></p>
+</div>
+
+</aside>
+
+</div>
+</div>
+</main>
 </body>
 </html>

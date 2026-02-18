@@ -504,45 +504,54 @@ def logout_view(request):
 #     d=Cart.objects.create(name=name,price=price,img=img,user_id=user_id)
 #     d.save()
 #     return render(request,'cart.html',{'user':user,'d':d})
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.conf import settings
+from .models import Order
+
+
 def cancel_order(request, id):
-    # REMOVE the 'if request.method == "POST"' line
+
     order = get_object_or_404(Order, id=id, user=request.user)
 
-    # 1. Validation
+    # 1️⃣ Already cancelled
     if order.status == "Cancelled":
         messages.error(request, "Order already cancelled.")
         return redirect('profile')
 
-    # Note: Use your status field check if 'is_shipped' isn't a real boolean field
+    # 2️⃣ Cannot cancel shipped/delivered
     if order.status in ["Shipped", "Delivered"]:
-        messages.error(request, "Cannot cancel order that has been shipped or delivered.")
+        messages.error(request, "Cannot cancel shipped or delivered orders.")
         return redirect('profile')
 
-    # 2. Update Status
+    # 3️⃣ Cancel order
     order.status = "Cancelled"
     order.save()
 
-    # 3. Refund Logic
-    try:
-        payment_id = Payment.payment_id
-        if payment_id: # Only try refund if a payment ID exists
-            # Ensure your amount matches the field name (order.totalprice?)
+    # 4️⃣ Refund only for online payments
+    if order.payment_mode in ["CARD", "UPI", "WALLET"] and hasattr(order, "payment_id") and order.payment_id:
+
+        try:
             refund = settings.razorpay_client.refund.create({
-                "payment_id": payment_id,
-                "amount": int(order.totalprice * 100) # Razorpay/Stripe use paise/cents
+                "payment_id": order.payment_id,
+                "amount": int(order.totalprice * 100)
             })
+
             order.refund_id = refund["id"]
             order.refund_status = "initiated"
             order.save()
+
             messages.success(request, "Order cancelled and refund initiated.")
-        else:
-            messages.success(request, "Order cancelled (No payment found to refund).")
-            
-    except Exception as e:
-        print(f"Refund Error: {e}") # Look at your terminal to see why it fails
-        messages.error(request, f"Order cancelled — refund failed: {str(e)}")
-        
+
+        except Exception as e:
+            print("Refund Error:", e)
+            messages.error(request, "Order cancelled but refund failed. Contact support.")
+
+    else:
+        messages.success(request, "Order cancelled successfully.")
+
     return redirect('profile')
+
 
 
 def profile(request):
@@ -716,57 +725,88 @@ def cart_view(request):
 from django.db.models import F
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.db.models import F
+from datetime import date, timedelta
+from .models import perfume, PerfumeDetail, Order
+
+
 def buynows(request, id):
+
+    # 🔒 Check login
     if not request.user.is_authenticated:
         messages.error(request, "You must be logged in to buy.")
         return redirect('login')
 
     user = request.user
 
-    product = perfume.objects.filter(id=id)
-    details = PerfumeDetail.objects.filter(perfume_id=id)
+    # ✅ Get product safely
+    product = get_object_or_404(perfume, id=id)
+    details = PerfumeDetail.objects.filter(perfume_id=id).first()
+
+    if not details:
+        messages.error(request, "Product details not found.")
+        return redirect('home')
+
+    price = product.price
+    pname = product.name
+    img = product.img
+    stock = details.stock
 
     today = date.today()
     fdate = today + timedelta(days=5)
 
-    # unpack product info
-    for i in product:
-        price = i.price
-        pname = i.name
-        img = i.img
-
-    # unpack stock
-    stock = 0
-    for i in details:
-        stock = i.stock
-
+    # 🚫 Out of stock
     if stock <= 0:
         messages.info(request, "Out of stock")
-        
         return redirect('home')
 
+    # ===========================
+    # 🔁 POST REQUEST
+    # ===========================
     if request.method == 'POST':
-        name = request.POST['name']
-        email = request.POST['email']
-        gender = request.POST['gender']
-        address = request.POST['address']
-        state = request.POST['state']
-        district = request.POST['district']
-        pincode = request.POST['pincode']
-        landmark = request.POST['landmark']
-        order_date = request.POST['odate']
-        delivered_date = request.POST['ddate']
-        payment_mode = request.POST.get("payment_mode")
-        quantity = request.POST['quantity']
 
-        # check stock quantity
-        if int(quantity) > stock:
+        # ✅ Use .get() safely
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        gender = request.POST.get('gender')
+        address = request.POST.get('address')
+        state = request.POST.get('state')
+        district = request.POST.get('district')
+        pincode = request.POST.get('pincode')
+        landmark = request.POST.get('landmark')
+        order_date = request.POST.get('odate')
+        delivered_date = request.POST.get('ddate')
+        payment_mode = request.POST.get('payment_mode', 'COD')
+        quantity = request.POST.get('quantity')
+
+        # 🔍 Basic validation
+        if not email:
+            messages.error(request, "Email is required.")
+            return redirect('home')
+
+        if not quantity:
+            messages.error(request, "Quantity is required.")
+            return redirect('home')
+
+        try:
+            quantity = int(quantity)
+        except ValueError:
+            messages.error(request, "Invalid quantity.")
+            return redirect('home')
+
+        # 🚫 Check stock
+        if quantity > stock:
             messages.info(request, "Quantity exceeds stock")
             return redirect('home')
 
-        total_price = int(quantity) * price
+        total_price = quantity * price
+
+        # ✅ Create Order
         order = Order.objects.create(
-            user_id=user.id,
+            user=user,
             address=address,
             full_name=name,
             email=email,
@@ -785,52 +825,52 @@ def buynows(request, id):
             img=img
         )
 
-        order.save()
-        message = (
-            f"Hello {name},\n"
-            "Thank you for ordering from AURA perfumes.\n"
-            f"Product Name: {pname}\n"
-            f"Total Price: {total_price}\n"
-            f"Quantity: {quantity}\n"
-            f"Address: {address}\n"
-        )
-        send_mail(
-            subject='Order Confirmed',
-            message=message,
-            from_email='yadhuljaykumar@gmail.com',
-            recipient_list=[email],
-            fail_silently=False
+        # 📦 Reduce stock
+        PerfumeDetail.objects.filter(perfume_id=id).update(
+            stock=F('stock') - quantity
         )
 
-        
+        # 📧 Send confirmation email safely
+        try:
+            message = (
+                f"Hello {name},\n\n"
+                "Thank you for ordering from AURA Perfumes.\n\n"
+                f"Product Name: {pname}\n"
+                f"Quantity: {quantity}\n"
+                f"Total Price: ₹{total_price}\n"
+                f"Address: {address}\n\n"
+                "We will deliver your order soon.\n"
+            )
 
-        # if payment mode is online/card, redirect to payment
-        if payment_mode in ['card_upi', 'Card / UPI']:
-            # pass necessary data to payment page (like via session or query params)
+            send_mail(
+                subject='Order Confirmed',
+                message=message,
+                from_email='yadhuljaykumar@gmail.com',
+                recipient_list=[email],
+                fail_silently=True,  # prevents crash if email fails
+            )
+
+        except Exception as e:
+            print("Email error:", e)
+
+        # 💳 If online payment
+        if payment_mode in ['card_upi', 'UPI']:
             request.session['order_id'] = order.id
-            PerfumeDetail.objects.filter(perfume_id=id).update(stock=F('stock') - int(quantity))
-              
-            
-            return redirect('payment')  # payment view name
+            return redirect('payment')
 
-        # else if cash on delivery or others — save order immediately
-    
-
-        # decrease stock
-        PerfumeDetail.objects.filter(perfume_id=id).update(stock=F('stock') - int(quantity))
-
-        messages.success(request, "Order placed successfully .")
-
-        
-        
+        messages.success(request, "Order placed successfully.")
         return redirect('home')
-    
+
+    # ===========================
+    # 🔁 GET REQUEST
+    # ===========================
     return render(request, 'buynow.html', {
         'product': product,
         'details': details,
         'today': today,
         'fdate': fdate,
     })
+
 
 
 def payments(request):
