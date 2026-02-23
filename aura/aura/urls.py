@@ -54,6 +54,8 @@ urlpatterns = [
     path("adminpage/dashboard/users/", views.alluser,name='users'),
     path("adminpage/dashboard/orders/", views.allorder,name='orders'),
     path('update-status/<int:id>',views.update_order_status, name='update_order_status'),
+    path("wishlist/delete/", views.delete_wishlist_item, name="delete_wishlist_item"),
+
 
 
     

@@ -19,6 +19,8 @@ import json
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from datetime import date
+from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -462,6 +464,8 @@ def register(request):
         return redirect("home")
 
     return render(request, "register.html")
+
+
    
 
 
@@ -552,6 +556,16 @@ def cancel_order(request, id):
 
     return redirect('profile')
 
+
+@login_required
+def delete_wishlist_item(request):
+    if request.method == "POST":
+        delete_id = request.POST.get("delete_id")
+        
+        wish_item = get_object_or_404(Wish, id=delete_id, users=request.user)
+        wish_item.delete()
+
+    return redirect(wish_view)
 
 
 def profile(request):
