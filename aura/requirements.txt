@@ -72,3 +72,4 @@ dj-database-url
 python-dotenv
 razorpay
 whitenoise
+psycopg2-binary
