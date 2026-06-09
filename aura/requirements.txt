@@ -70,3 +70,4 @@ WTForms==3.2.1
 gunicorn
 dj-database-url
 python-dotenv
+razorpay
