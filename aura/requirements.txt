@@ -37,7 +37,7 @@ mysql-conector-python==0.1.8
 mysql-connector-python==9.4.0
 narwhals==2.14.0
 numpy==2.4.0
-onnxruntime==1.23.2
+onnxruntime==1.26.0
 packaging==25.0
 pandas==2.3.3
 pillow==12.0.0
@@ -71,3 +71,7 @@ Werkzeug==3.1.4
 whitenoise==6.12.0
 withoutbg==1.0.2
 WTForms==3.2.1
+whitenoise
+razorpay
+python-dotenv
+dj-database-url
