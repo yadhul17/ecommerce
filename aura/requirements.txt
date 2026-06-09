@@ -68,3 +68,4 @@ Werkzeug==3.1.4
 withoutbg==1.0.2
 WTForms==3.2.1
 gunicorn
+dj-database-url
