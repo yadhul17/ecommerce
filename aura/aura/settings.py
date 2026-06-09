@@ -33,10 +33,8 @@ SECRET_KEY = 'django-insecure-+p0)a6gu=l74of_xy3m)r53y%#9&k=tvm33aw6_8=7)hst1mkl
 DEBUG =False
 
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
-
-
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
+ALLOWED_HOSTS = ['aura.onrender.com', '*']
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 
 # Application definition
 
