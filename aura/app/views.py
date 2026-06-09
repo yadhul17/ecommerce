@@ -222,9 +222,11 @@ def home(request):
     if not user.is_authenticated:
         return redirect(login_view)
     
-    data = perfume.objects.prefetch_related('details').order_by('-id')[:4]
-    d = new.objects.all()[:4]
-    print(user)
+    try:
+        data = perfume.objects.prefetch_related('details').order_by('-id')[:4]
+        d = new.objects.all()[:4]
+    except Exception as e:
+        return HttpResponse(f"Error: {e}")
 
     return render(request, 'home.html', {'data': data, 'd': d})
 
