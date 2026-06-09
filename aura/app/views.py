@@ -218,21 +218,15 @@ def update_order_status(request,id):
 
 
 def home(request):
-    data = perfume.objects.all().order_by('-id')[:4]  # e.g. last 4 entries
-    data = data.prefetch_related('details')
-
-    d=new.objects.all()[:4]
     user = request.user
-    print(user)
     if not user.is_authenticated:
-        return redirect(login_view)  
+        return redirect(login_view)
     
+    data = perfume.objects.prefetch_related('details').order_by('-id')[:4]
+    d = new.objects.all()[:4]
+    print(user)
 
-
-
-   
-
-    return render(request ,'home.html',{'data':data,'d':d})
+    return render(request, 'home.html', {'data': data, 'd': d})
 
 
 # def adminlogin(request):
