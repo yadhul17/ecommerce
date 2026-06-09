@@ -71,3 +71,4 @@ gunicorn
 dj-database-url
 python-dotenv
 razorpay
+whitenoise
