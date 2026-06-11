@@ -223,11 +223,11 @@ def home(request):
 
     try:
         data = perfume.objects.prefetch_related('perfumedetail_set').order_by('-id')[:4]
-        d = new.objects.all()[:4]
+        # d = new.objects.all()[:4]
     except Exception as e:
         return HttpResponse(f"Error: {e}")
 
-    return render(request, 'home.html', {'data': data, 'd': d})
+    return render(request, 'home.html', {'data': data})
 
 # def adminlogin(request):
 #     if request.method == 'POST':
