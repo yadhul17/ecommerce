@@ -219,7 +219,7 @@ def update_order_status(request,id):
 
 def home(request):
     if not request.user.is_authenticated:
-        return redirect('login')  # ← use URL name string, not function
+        return redirect('login')  # ← fix: use URL name string
 
     try:
         data = perfume.objects.prefetch_related('perfumedetail_set').order_by('-id')[:4]
@@ -228,7 +228,6 @@ def home(request):
         return HttpResponse(f"Error: {e}")
 
     return render(request, 'home.html', {'data': data, 'd': d})
-
 
 # def adminlogin(request):
 #     if request.method == 'POST':
@@ -487,7 +486,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.info(request, 'Logged out successfully')
-    return redirect(login_view)
+    return redirect('login')
 # def addtocart(request,id):
 #     user=request.user
 
@@ -513,21 +512,19 @@ def cancel_order(request, id):
 
     order = get_object_or_404(Order, id=id, user=request.user)
 
-    # 1️⃣ Already cancelled
+  
     if order.status == "Cancelled":
         messages.error(request, "Order already cancelled.")
         return redirect('profile')
 
-    # 2️⃣ Cannot cancel shipped/delivered
+   
     if order.status in ["Shipped", "Delivered"]:
         messages.error(request, "Cannot cancel shipped or delivered orders.")
         return redirect('profile')
 
-    # 3️⃣ Cancel order
     order.status = "Cancelled"
     order.save()
 
-    # 4️⃣ Refund only for online payments
     if order.payment_mode in ["CARD", "UPI", "WALLET"] and hasattr(order, "payment_id") and order.payment_id:
 
         try:
