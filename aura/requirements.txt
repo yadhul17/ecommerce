@@ -79,4 +79,4 @@ psycopg2-binary
 gunicorn
 psycopg2-binary
 cloudinary
-django-cloudinary-storage
+
