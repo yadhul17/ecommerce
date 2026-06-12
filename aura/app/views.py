@@ -222,7 +222,7 @@ def home(request):
         return redirect('login')  # ← fix: use URL name string
 
     try:
-        data = perfume.objects.prefetch_related('perfumedetail_set').order_by('-id')[:4]
+        data = perfume.objects.prefetch_related('details').order_by('-id')[:4]
         # d = new.objects.all()[:4]
     except Exception as e:
         return HttpResponse(f"Error: {e}")
