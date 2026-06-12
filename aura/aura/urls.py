@@ -39,7 +39,7 @@ urlpatterns = [
     path('logout/',views.logout_view),
     path('profile/',views.profile,name="profile"),
     path('payment/',views.payments,name="payment"),
-    path('razorpay/callback/',views.callback),
+    path('razorpay/callback/',views.callback,name="callback"),
     path('cart/<int:id>',views.addtocart),
     path('wish/<int:id>',views.addtoWish),
     path('wish/',views.wish_view),

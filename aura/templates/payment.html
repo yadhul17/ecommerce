@@ -3,47 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Payment - Razorpay</title>
+    <title>Secure Payment - AURA</title>
+    <!-- Tailwind CSS for modern aesthetics -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="bg-slate-900 flex items-center justify-center min-h-screen text-slate-100">
 
-    <div class="max-w-md w-full bg-white shadow-lg rounded-xl p-8">
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-extrabold text-gray-900">Checkout</h2>
-            <p class="text-gray-500">Order #{{ order_obj.id }}</p>
+    <div class="max-w-md w-full bg-slate-800 border border-slate-700 shadow-2xl rounded-2xl p-8 relative overflow-hidden">
+        <!-- Subtle glowing background orb -->
+        <div class="absolute -top-20 -left-20 w-48 h-48 bg-indigo-500 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+        <div class="absolute -bottom-20 -right-20 w-48 h-48 bg-purple-500 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+
+        <div class="text-center mb-8 relative z-10">
+            <h2 class="text-3xl font-extrabold tracking-wide text-white">Complete Payment</h2>
+            <p class="text-slate-400 mt-2">Order #{{ order_obj.id }}</p>
         </div>
 
-        <div class="space-y-4 mb-8">
-            <div class="flex justify-between text-lg">
-                <span class="text-gray-600">Customer:</span>
-                <span class="font-semibold text-gray-800">{{ order_name }}</span>
+        <div class="space-y-4 mb-8 bg-slate-850 p-5 rounded-xl border border-slate-700/50 relative z-10">
+            <div class="flex justify-between text-sm">
+                <span class="text-slate-400">Customer</span>
+                <span class="font-semibold text-slate-200">{{ order_name }}</span>
             </div>
-            <div class="flex justify-between text-2xl border-t pt-4">
-                <span class="font-bold text-gray-900">Total Amount:</span>
-                <span class="font-bold text-indigo-600">₹{{ order_amount }}</span>
+            <div class="flex justify-between text-sm">
+                <span class="text-slate-400">Product</span>
+                <span class="font-semibold text-slate-200">{{ order_obj.product_name }} (x{{ order_obj.quantity }})</span>
+            </div>
+            <div class="flex justify-between text-2xl border-t border-slate-700/50 pt-4 mt-2">
+                <span class="font-bold text-slate-200">Total</span>
+                <span class="font-black text-indigo-400">₹{{ order_amount }}</span>
             </div>
         </div>
 
         {% if razorpay_order_id %}
-            <button id="rzp-button1" class="w-full bg-indigo-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-indigo-700 transition duration-300 flex items-center justify-center shadow-lg">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+            <button id="rzp-button1" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-4 px-6 rounded-xl hover:from-indigo-650 hover:to-purple-750 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center shadow-lg relative z-10">
+                <svg class="w-5 h-5 mr-2 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                </svg>
                 Pay with Razorpay
             </button>
         {% else %}
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" class="w-full bg-gray-900 text-white font-bold py-4 px-6 rounded-lg hover:bg-black transition duration-300">
-                    Confirm & Proceed to Pay
-                </button>
-            </form>
+            <div class="p-4 bg-red-900/30 border border-red-500/50 text-red-200 rounded-lg text-center text-sm relative z-10">
+                Failed to load payment configuration. Please try placing your order again.
+            </div>
         {% endif %}
 
-        <div class="mt-6 text-center">
-            <p class="text-xs text-gray-400">Secure payment powered by Razorpay</p>
+        <div class="mt-6 text-center relative z-10">
+            <p class="text-xs text-slate-500">Secure payment integration powered by Razorpay</p>
         </div>
     </div>
 
+    <!-- Razorpay Checkout JS -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         {% if razorpay_order_id %}
@@ -51,19 +66,25 @@
             "key": "{{ razorpay_key }}", 
             "amount": "{{ order_amount|add:"0" }}00", // Amount in paise
             "currency": "INR",
-            "name": "Perfume Store",
+            "name": "AURA Perfumes",
             "description": "Payment for Order #{{ order_obj.id }}",
             "order_id": "{{ razorpay_order_id }}",
-            "callback_url": "{{ callback_url }}", // Your Django callback view
+            "callback_url": "{{ callback_url }}", 
             "prefill": {
                 "name": "{{ order_name }}",
                 "email": "{{ request.user.email }}",
             },
             "theme": {
-                "color": "#4F46E5"
+                "color": "#6366F1"
             }
         };
         var rzp1 = new Razorpay(options);
+        
+        // Auto-open Checkout Modal as soon as the page loads
+        window.onload = function() {
+            rzp1.open();
+        };
+
         document.getElementById('rzp-button1').onclick = function(e){
             rzp1.open();
             e.preventDefault();

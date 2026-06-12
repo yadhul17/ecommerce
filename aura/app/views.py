@@ -509,15 +509,12 @@ from .models import Order
 
 
 def cancel_order(request, id):
-
     order = get_object_or_404(Order, id=id, user=request.user)
 
-  
     if order.status == "Cancelled":
         messages.error(request, "Order already cancelled.")
         return redirect('profile')
 
-   
     if order.status in ["Shipped", "Delivered"]:
         messages.error(request, "Cannot cancel shipped or delivered orders.")
         return redirect('profile')
@@ -525,11 +522,13 @@ def cancel_order(request, id):
     order.status = "Cancelled"
     order.save()
 
-    if order.payment_mode in ["CARD", "UPI", "WALLET"] and hasattr(order, "payment_id") and order.payment_id:
+    # Find the successful payment record for this order
+    payment_record = Payment.objects.filter(orders=order, status="SUCCESS").first()
 
+    if order.payment_mode in ["CARD", "UPI", "WALLET"] and payment_record and payment_record.payment_id:
         try:
             refund = settings.razorpay_client.refund.create({
-                "payment_id": order.payment_id,
+                "payment_id": payment_record.payment_id,
                 "amount": int(order.totalprice * 100)
             })
 
@@ -879,72 +878,77 @@ def buynows(request, id):
 
 
 
+@login_required
 def payments(request):
     print("Razorpay Key ID:", settings.RAZORPAY_KEY_ID)
     print("Razorpay Key Secret:", settings.RAZORPAY_KEY_SECRET)
     
-   # get order_id from session
+    # get order_id from session
     order_id = request.session.get('order_id')
     if not order_id:
         messages.error(request, "No order found to pay for.")
         return redirect("home")
 
     # fetch the Order object (your own model)
-    order_obj = get_object_or_404(Order, id=order_id)
+    order_obj = get_object_or_404(Order, id=order_id, user=request.user)
 
     order_amount = order_obj.totalprice
     order_name = order_obj.full_name
 
-    if request.method == "POST":
+    # Check if a pending payment record already exists for this order
+    payment_record = Payment.objects.filter(orders=order_obj, status='PENDING').first()
+
+    if not payment_record:
         # initialize razorpay client
         client = razorpay.Client(
             auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
         )
 
-        # create a Razorpay order using the amount
-        razorpay_order = client.order.create({
-            "amount": int(order_amount) * 100,  # in paise
-            "currency": "INR",
-            "receipt": f"order_{order_obj.id}"
-        })
-        razorpay_order_id = razorpay_order["id"]
+        try:
+            # create a Razorpay order using the amount in paise
+            amount_in_paise = int(order_amount) * 100
+            razorpay_order = client.order.create({
+                "amount": amount_in_paise,
+                "currency": "INR",
+                "receipt": f"order_{order_obj.id}"
+            })
+            razorpay_order_id = razorpay_order["id"]
 
-        # create a payment record in your database
-        payment_record = Payment.objects.create(
-            users=request.user,
-            orders=order_obj,
-            amount=order_amount,
-            provider_order_id=razorpay_order_id,
-            payment_id="",      # will update after callback
-            signature_id="",    # will update after callback
-        )
+            # create a payment record in your database
+            payment_record = Payment.objects.create(
+                users=request.user,
+                orders=order_obj,
+                amount=order_amount,
+                provider_order_id=razorpay_order_id,
+                payment_id="",      # will update after callback
+                signature_id="",    # will update after callback
+                status='PENDING'
+            )
+        except Exception as e:
+            print("Razorpay Order Creation Error:", e)
+            messages.error(request, "Failed to initiate payment with Razorpay. Please try again.")
+            return redirect("home")
+    else:
+        razorpay_order_id = payment_record.provider_order_id
 
-        # pass to template
-        context = {
-            "callback_url": "http://" + "127.0.0.1:8000" + "/razorpay/callback/",
+    # Construct callback url dynamically using request
+    callback_url = request.build_absolute_uri('/razorpay/callback/')
 
-            "razorpay_key": settings.RAZORPAY_KEY_ID,
-            "razorpay_order_id": razorpay_order_id,
-            "order_obj": order_obj,
-            "order_name": order_name,
-            "order_amount": order_amount,
-            "payment_record": payment_record,
-        }
-        return render(request, "payment.html", context)
-
-    
-
-    # GET request: show payment page
-    return render(request, "payment.html", {
+    # pass to template
+    context = {
+        "callback_url": callback_url,
+        "razorpay_key": settings.RAZORPAY_KEY_ID,
+        "razorpay_order_id": razorpay_order_id,
         "order_obj": order_obj,
         "order_name": order_name,
-        "order_amount": order_amount
-    })
+        "order_amount": order_amount,
+        "payment_record": payment_record,
+    }
+    return render(request, "payment.html", context)
 
 
 @csrf_exempt
 def callback(request):
-    
     client = razorpay.Client(
         auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
     )
@@ -974,6 +978,15 @@ def callback(request):
             # If signature verification passes, mark as success
             payment_record.status = "SUCCESS"
             payment_record.save()
+
+            # Update order status to Processing
+            order_obj = payment_record.orders
+            order_obj.status = "Processing"
+            order_obj.save()
+
+            # Clear order from session
+            if 'order_id' in request.session:
+                del request.session['order_id']
 
             return render(request, "callback.html", {"status": "Success"})
 
